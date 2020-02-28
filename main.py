@@ -38,15 +38,25 @@ def main():
     
     for item in mods:
         mod = QListWidgetItem()
-        mod.setText(item['title'])
+        modWidget = QWidget()
+        modWidgetText = QLabel(item['title'])
+        modWidgetButton = QPushButton("Install")
+        modWidgetLayout = QHBoxLayout()
+        modWidgetLayout.addWidget(modWidgetText)
+        modWidgetLayout.addWidget(modWidgetButton)
+        modWidgetLayout.addStretch()
+
+        modWidgetLayout.setSizeConstraint(QHBoxLayout.SetFixedSize)   
+        modWidget.setLayout(modWidgetLayout)
+        mod.setSizeHint(modWidget.sizeHint())
         image = item['field_screenshots']
-        print(image)
         mod.setIcon(loadIcon("https://minifymods.com" + image))
         listWidget.addItem(mod)
+        listWidget.setItemWidget(mod, modWidget)
         
     
     
-	
+    listWidget.setIconSize(QSize(128, 128))
     listWidget.setWindowTitle('Adelphi')
     listWidget.itemClicked.connect(listWidget.Clicked)
    
