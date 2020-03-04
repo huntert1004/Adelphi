@@ -55,7 +55,6 @@ def main():
         listWidget.setItemWidget(mod, modWidget)
         
     
-    
     listWidget.setIconSize(QSize(128, 128))
     listWidget.setWindowTitle('Adelphi')
     listWidget.itemClicked.connect(listWidget.Clicked)
