@@ -4,6 +4,8 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 import json
 import urllib.request
+import qtmodern.styles
+import qtmodern.windows
 
 class myLabelWidget(QLabel):
     title = ''
@@ -11,12 +13,41 @@ class myLabelWidget(QLabel):
     description = ''
     compat = ''
     modfile = ''
-    
+        
+    @pyqtSlot(QLabel)
     def Clicked(self,event):
-        print(event)
-        QMessageBox.information(self, "Whatever", self.title)
+        #print(event)
+        modDetail = ModDetailsWindow(self, self)
+        modDetail.setGeometry(100, 200, 100, 100)
+        modDetail.setModal(True)
+        #modDetail.show()
+        mw = qtmodern.windows.ModernWindow(modDetail)
+        mw.show()
+        #QMessageBox.information(self, "Whatever", self.title)
 
-
+class ModDetailsWindow(QDialog):
+    
+    def __init__(self, mod, parent=None):
+        super().__init__(parent)
+        self.name = mod.title
+        self.setWindowTitle(mod.title)
+        layout = QVBoxLayout()
+        imageLabel = QLabel()
+        imageLabel.setPixmap(mod.image)
+        layout.addWidget(imageLabel)
+        layout.addWidget(QLabel(mod.title))
+        layout.addWidget(QLabel(mod.description))
+        layout.addWidget(QLabel("Minecraft Compatability: " + mod.compat))
+        installButton = QPushButton("Install Now")
+        installButton.clicked.connect(lambda: self.install(mod.modfile))
+        layout.addWidget(installButton)
+        
+        self.setLayout(layout)
+    
+    def install(self, modUrl):
+        urllib.request.urlretrieve("https://minifymods.com" + modUrl)
+        QMessageBox.information(self, "Whatever", modUrl)
+        
 class App(QMainWindow):
     
     def __init__(self):
@@ -31,8 +62,10 @@ class App(QMainWindow):
         
         self.table_widget = MyTableWidget(self)
         self.setCentralWidget(self.table_widget)
+        #self.show()
         
-        self.show()
+        mw = qtmodern.windows.ModernWindow(self)
+        mw.show()
 class MyTableWidget(QWidget):
            
     def __init__(self, parent):
@@ -70,8 +103,7 @@ class MyTableWidget(QWidget):
             imageLabel.description = item['body']
             imageLabel.compat = item['field_minecraft_compatibility']
             imageLabel.modfile = item['field_mod_file']
-            imageLabel.image = imageUrl
-            
+            imageLabel.image = image           
             imageLabel.setPixmap(image.scaled(300, 200, Qt.KeepAspectRatio))
             imageLabel.setFixedSize(300, 200)
             imageLabel.mousePressEvent = imageLabel.Clicked
@@ -88,6 +120,8 @@ class MyTableWidget(QWidget):
     
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+    qtmodern.styles.dark(app)
+    
     ex = App()
     sys.exit(app.exec_())
     
