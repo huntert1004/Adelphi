@@ -55,7 +55,7 @@ class ModDetailsWindow(QDialog):
             with file as tmp_file:
                 shutil.copyfileobj(response, tmp_file)
 
-        QMessageBox.information(self, "Whatever", modUrl)
+        QMessageBox.information(self, "Adellphi", "Install Successful")
         
 class App(QMainWindow):
     
