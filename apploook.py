@@ -3,6 +3,8 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 import json
+import os
+import shutil
 import urllib.request
 import qtmodern.styles
 import qtmodern.windows
@@ -45,7 +47,14 @@ class ModDetailsWindow(QDialog):
         self.setLayout(layout)
     
     def install(self, modUrl):
-        urllib.request.urlretrieve("https://minifymods.com" + modUrl)
+        filename = modUrl.split("/")[-1]
+        #filedata = urllib.request.urlretrieve("https://minifymods.com" + modUrl).read()
+        file = open(os.getenv('APPDATA') + "\\.minecraft\\mods\\"+filename,"wb")
+        #load data into file object
+        with urllib.request.urlopen("https://minifymods.com" + modUrl) as response:
+            with file as tmp_file:
+                shutil.copyfileobj(response, tmp_file)
+
         QMessageBox.information(self, "Whatever", modUrl)
         
 class App(QMainWindow):
