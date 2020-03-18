@@ -9,6 +9,12 @@ import urllib.request
 import qtmodern.styles
 import qtmodern.windows
 
+
+class myListWidget(QListWidget):
+
+   def Clicked(self,item):
+      QMessageBox.information(self, "ListWidget", "You installed: "+item.text())
+
 class myLabelWidget(QLabel):
     title = ''
     image = ''
@@ -93,15 +99,18 @@ class MyTableWidget(QWidget):
         self.tabs.addTab(self.tab2,"Tab 2")
         
         # Create first tab
-        self.tab1.layout = QGridLayout(self)
+        self.tab1.layout = QVBoxLayout(self)
+        grid = QGridLayout()
 
         #get data
         json_url = "https://minifymods.com/api/mods?_format=json"
         data = urllib.request.urlopen(json_url).read().decode()
         mods = json.loads(data);
-        
-        positions = [(i,j) for i in range(5) for j in range(4)]
-        
+        gridmods = mods[:9]
+        listmods = mods[9:len(mods)]
+
+        positions = [(i,j) for i in range(3) for j in range(3)]
+                
         for position,item in zip(positions,mods):
             imageUrl = "https://minifymods.com" + item['field_screenshots']
             image = QPixmap()
@@ -117,11 +126,17 @@ class MyTableWidget(QWidget):
             imageLabel.setFixedSize(300, 200)
             imageLabel.mousePressEvent = imageLabel.Clicked
             
-            self.tab1.layout.addWidget(imageLabel, *position)
-            
-       
-        self.tab1.setLayout(self.tab1.layout)
+            grid.addWidget(imageLabel, *position)
         
+        #TODO loop over listmods and add to an instance of myListWidget
+
+            #possibly do this
+            #grid.addWidget(listWidget)
+
+
+        self.tab1.layout.addLayout(grid)
+        self.tab1.setLayout(self.tab1.layout)
+        #add grid to tab1
         # Add tabs to widget
         self.layout.addWidget(self.tabs)
         self.setLayout(self.layout)
