@@ -125,7 +125,7 @@ class MyTableWidget(QWidget):
         # Create first tab
         self.tab1.layout = QVBoxLayout(self)
         grid = QGridLayout()
-
+        listWidget = myListWidget()
         #get data
         json_url = "https://minifymods.com/api/mods?_format=json"
         data = urllib.request.urlopen(json_url).read().decode()
@@ -156,7 +156,7 @@ class MyTableWidget(QWidget):
         #TODO loop over listmods and add to an instance of myListWidget
 
             #possibly do this
-            #grid.addWidget(listWidget)
+            grid.addWidget(listWidget)
 
 
         self.tab1.layout.addLayout(grid)
