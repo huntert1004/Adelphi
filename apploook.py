@@ -8,6 +8,7 @@ import shutil
 import urllib.request
 import qtmodern.styles
 import qtmodern.windows
+from pathlib import Path
 
 
 class myListWidget(QListWidget):
@@ -35,6 +36,22 @@ class myLabelWidget(QLabel):
 
 class ModDetailsWindow(QDialog):
     
+    def isForgeInstalled(self, modCompat):
+        if os.name == 'nt':
+            appData = os.getenv('APPDATA')
+            test_directory = appData + "\\.minecraft\\versions"
+        else:
+            appData = str(Path.home())
+            test_directory = appData + "/.minecraft/versions"
+
+        modVersions = [x.strip() for x in modCompat.split(',')]
+        for child in os.listdir(test_directory):
+            for modVersion in modVersions:
+                if (child.startswith(modVersion + "-forge")):
+                    test_path = os.path.join(test_directory, child)
+                    if os.path.isdir(test_path):
+                        return True
+            
     def __init__(self, mod, parent=None):
         super().__init__(parent)
         self.name = mod.title
@@ -46,13 +63,20 @@ class ModDetailsWindow(QDialog):
         layout.addWidget(QLabel(mod.title))
         layout.addWidget(QLabel(mod.description))
         layout.addWidget(QLabel("Minecraft Compatability: " + mod.compat))
-        installButton = QPushButton("Install Now")
-        installButton.clicked.connect(lambda: self.install(mod.modfile))
-        layout.addWidget(installButton)
+        if (self.isForgeInstalled(mod.compat)):
+            installButton = QPushButton("Install Now")
+            installButton.clicked.connect(lambda: self.install(mod.modfile))
+            layout.addWidget(installButton)
+        else:
+            missingForgeLabel = QLabel("Please create a MinecraftForge installation of version " + mod.compat + " to install this mod.")
+            layout.addWidget(missingForgeLabel)
         
         self.setLayout(layout)
     
     def install(self, modUrl):
+        #check if there is a compatible forge installation
+        
+        
         filename = modUrl.split("/")[-1]
         #filedata = urllib.request.urlretrieve("https://minifymods.com" + modUrl).read()
         file = open(os.getenv('APPDATA') + "\\.minecraft\\mods\\"+filename,"wb")
@@ -106,10 +130,11 @@ class MyTableWidget(QWidget):
         json_url = "https://minifymods.com/api/mods?_format=json"
         data = urllib.request.urlopen(json_url).read().decode()
         mods = json.loads(data);
-        gridmods = mods[:9]
-        listmods = mods[9:len(mods)]
+        #gridmods = mods[:9]
+        #listmods = mods[9:len(mods)]
 
-        positions = [(i,j) for i in range(3) for j in range(3)]
+
+        positions = [(i,j) for i in range(5) for j in range(4)]
                 
         for position,item in zip(positions,mods):
             imageUrl = "https://minifymods.com" + item['field_screenshots']
