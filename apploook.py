@@ -32,7 +32,6 @@ class myLabelWidget(QLabel):
         #modDetail.show()
         mw = qtmodern.windows.ModernWindow(modDetail)
         mw.show()
-        #QMessageBox.information(self, "Whatever", self.title)
 
 class ModDetailsWindow(QDialog):
     
