@@ -12,6 +12,7 @@ from pathlib import Path
 
 from view.GridItem import GridItem
 from view.ListItem import ListItem
+from controller.ModsController import ModsController
 
 class MainWindow(QWidget):
           
@@ -35,9 +36,8 @@ class MainWindow(QWidget):
     self.grid = QGridLayout()
     self.listWidget = ListItem()
     #get data
-    json_url = "https://minifymods.com/api/mods?_format=json"
-    data = urllib.request.urlopen(json_url).read().decode()
-    mods = json.loads(data);
+    mods = ModsController().getModsData()
+
     #gridmods = mods[:9]
     #listmods = mods[9:len(mods)]
 
