@@ -1,5 +1,7 @@
 import json
 import urllib.request
+import os
+from pathlib import Path
 
 class ModsController:
   __instance = None
@@ -22,3 +24,23 @@ class ModsController:
         raise Exception("This class is a singleton!")
     else:
         ModsController.__instance = self
+
+  @staticmethod
+  def getVersionsDirectory():
+        if os.name == 'nt':
+            appData = os.getenv('APPDATA')
+            versions_directory = appData + "\\.minecraft\\versions"
+        else:
+            appData = str(Path.home())
+            versions_directory = appData + "/.minecraft/versions"
+        return versions_directory
+
+  @staticmethod
+  def getModDirectory():
+    if os.name == 'nt':
+        appData = os.getenv('APPDATA')
+        mod_directory = appData + "\\.minecraft\\mods\\"
+    else:
+        appData = str(Path.home())
+        mod_directory = appData + "/.minecraft/mods/"
+    return mod_directory

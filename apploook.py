@@ -2,20 +2,15 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-import json
-import os
-import shutil
-import urllib.request
 import qtmodern.styles
 import qtmodern.windows
-from pathlib import Path
 from view.MainWindow import MainWindow
 
 class App(QMainWindow):
     
     def __init__(self):
         super().__init__()
-        self.title = 'The Oasiis'
+        self.title = 'Adellphi'
         self.left = 0
         self.top = 0
         self.width = 1200

@@ -28,13 +28,13 @@ class MainWindow(QWidget):
     self.tab1.setWidgetResizable(True)
     
     # Add tabs
-    self.tabs.addTab(self.tab1,"Tab 1")
-    self.tabs.addTab(self.tab2,"Tab 2")
+    self.tabs.addTab(self.tab1,"Mods")
+    #self.tabs.addTab(self.tab2,"Tab 2")
     
     # Create first tab
     self.tab1.layout = QVBoxLayout(self)
     self.grid = QGridLayout()
-    self.listWidget = ListItem()
+    #self.listWidget = ListItem()
     #get data
     mods = ModsController().getModsData()
 
