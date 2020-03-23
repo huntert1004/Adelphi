@@ -15,15 +15,11 @@ class ModDetailsWindow(QDialog):
     def __init__(self, parent):
       super(ModDetailsWindow, self).__init__(parent)
 
-    
-
     def isModInstalled(self,modFile):
         mod_directory = ModsController.getModDirectory()
         filename = modFile.split("/")[-1]
-        print(mod_directory)
         if os.path.isdir(mod_directory):
             test_filepath = os.path.join(mod_directory,filename)
-            print(test_filepath)
             if os.path.isfile(test_filepath):
                 return True
 
@@ -52,36 +48,44 @@ class ModDetailsWindow(QDialog):
         if (self.isForgeInstalled(mod.compat)):
 
             if (self.isModInstalled(mod.modfile)):
-                self.uninstallButton = QPushButton("Uninstall Now")
-                self.uninstallButton.clicked.connect(lambda: self.uninstall(mod.modfile))
-                self.layout.addWidget(self.uninstallButton)
+                self.addUninstallButton(mod.modfile)
             else:
-                self.installButton = QPushButton("Install Now")
-                self.installButton.clicked.connect(lambda: self.install(mod.modfile))
-                self.layout.addWidget(self.installButton)
+                self.addInstallButton(mod.modfile)
         else:
             self.missingForgeLabel = QLabel("Please create a MinecraftForge installation of version " + mod.compat + " to install this mod.")
             self.layout.addWidget(self.missingForgeLabel)
         
         self.setLayout(self.layout)
-    
-    def uninstall(self, modFile):
-        filename = modFile.split("/")[-1]
+
+    def addUninstallButton(self, modfile):
+        self.uninstallButton = QPushButton("Uninstall Now")
+        self.uninstallButton.clicked.connect(lambda: self.uninstall(modfile))
+        self.layout.addWidget(self.uninstallButton)
+
+    def addInstallButton(self, modfile):
+        self.installButton = QPushButton("Install Now")
+        self.installButton.clicked.connect(lambda: self.install(modfile))
+        self.layout.addWidget(self.installButton)
+
+    def uninstall(self, modfile):
+        filename = modfile.split("/")[-1]
         mod_directory = ModsController.getModDirectory()
         file = os.path.join(mod_directory,filename)
         os.remove(file)
-
+        self.layout.removeWidget(self.uninstallButton)
+        self.addInstallButton(modfile)
         QMessageBox.information(self, "Adellphi", "Uninstall Successful")        
 
-    def install(self, modUrl):
-        filename = modUrl.split("/")[-1]
+    def install(self, modfile):
+        filename = modfile.split("/")[-1]
         mod_directory = ModsController.getModDirectory()
 
         file = open(mod_directory +filename,"wb")
         #load data into file object
-        with urllib.request.urlopen("https://minifymods.com" + modUrl) as response:
+        with urllib.request.urlopen("https://minifymods.com" + modfile) as response:
             with file as tmp_file:
                 shutil.copyfileobj(response, tmp_file)
-
+        self.layout.removeWidget(self.installButton)
+        self.addUninstallButton(modfile)
         QMessageBox.information(self, "Adellphi", "Install Successful")
         
