@@ -43,7 +43,9 @@ class ModDetailsWindow(QDialog):
         self.imageLabel.setPixmap(mod.image)
         self.layout.addWidget(self.imageLabel)
         self.layout.addWidget(QLabel(mod.title))
-        self.layout.addWidget(QLabel(mod.description))
+        self.descriptionLabel = QLabel(mod.description)
+        self.descriptionLabel.setWordWrap(True)
+        self.layout.addWidget(self.descriptionLabel)
         self.layout.addWidget(QLabel("Minecraft Compatability: " + mod.compat))
         if (self.isForgeInstalled(mod.compat)):
 
@@ -53,6 +55,7 @@ class ModDetailsWindow(QDialog):
                 self.addInstallButton(mod.modfile)
         else:
             self.missingForgeLabel = QLabel("Please create a MinecraftForge installation of version " + mod.compat + " to install this mod.")
+            self.missingForgeLabel.setWordWrap(True)
             self.layout.addWidget(self.missingForgeLabel)
         
         self.setLayout(self.layout)
