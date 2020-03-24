@@ -10,6 +10,7 @@ import qtmodern.styles
 import qtmodern.windows
 from pathlib import Path
 from controller.ModsController import ModsController
+import subprocess
 
 class ModDetailsWindow(QDialog):
     def __init__(self, parent):
@@ -47,6 +48,7 @@ class ModDetailsWindow(QDialog):
         self.descriptionLabel.setWordWrap(True)
         self.layout.addWidget(self.descriptionLabel)
         self.layout.addWidget(QLabel("Minecraft Compatability: " + mod.compat))
+        
         if (self.isForgeInstalled(mod.compat)):
 
             if (self.isModInstalled(mod.modfile)):
@@ -57,16 +59,45 @@ class ModDetailsWindow(QDialog):
             self.missingForgeLabel = QLabel("Please create a MinecraftForge installation of version " + mod.compat + " to install this mod.")
             self.missingForgeLabel.setWordWrap(True)
             self.layout.addWidget(self.missingForgeLabel)
+            modVersions = [x.strip() for x in mod.compat.split(',')]
+            self.forgeInstallButton = QPushButton("Install Forge v" + modVersions[0])
+            self.forgeInstallButton.clicked.connect(lambda: self.installForge(modVersions[0], mod.modfile))
+            self.layout.addWidget(self.forgeInstallButton)
         
         self.setLayout(self.layout)
 
+    def installForge(self, version, modfile):
+        forgeDownloadUrl = "";
+ 
+        if (version == "1.15.2"):
+            forgeDownloadUrl = "https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.15.2-31.1.0/forge-1.15.2-31.1.0-installer.jar"
+        elif (version == "1.12.2"):
+            forgeDownloadUrl = "https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.12.2-14.23.5.2768/forge-1.12.2-14.23.5.2768-installer.jar"
+        elif (version == "1.8.9"):
+            forgeDownloadUrl = "https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.8.9-11.15.1.1722/forge-1.8.9-11.15.1.1722-installer.jar"
+        elif (version == "1.7.10"):
+            forgeDownloadUrl = "https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.7.10-10.13.4.1558-1.7.10/forge-1.7.10-10.13.4.1558-1.7.10-installer.jar"
+ 
+        filename = forgeDownloadUrl.split("/")[-1]
+        install_directory = ModsController.getDotMinecraftDirectory()
+
+        file = open(install_directory +filename,"wb")
+        #load data into file object
+        with urllib.request.urlopen(forgeDownloadUrl) as response:
+            with file as tmp_file:
+                shutil.copyfileobj(response, tmp_file)
+                subprocess.call(["java","-jar",install_directory + "/" + filename])
+        self.addInstallButton(modfile)
+        self.layout.removeWidget(self.forgeInstallButton)
+        QMessageBox.information(self, "Adellphi", "Forge v" + version + " Install Successful")
+
     def addUninstallButton(self, modfile):
-        self.uninstallButton = QPushButton("Uninstall Now")
+        self.uninstallButton = QPushButton("Uninstall Mod")
         self.uninstallButton.clicked.connect(lambda: self.uninstall(modfile))
         self.layout.addWidget(self.uninstallButton)
 
     def addInstallButton(self, modfile):
-        self.installButton = QPushButton("Install Now")
+        self.installButton = QPushButton("Install Mod")
         self.installButton.clicked.connect(lambda: self.install(modfile))
         self.layout.addWidget(self.installButton)
 
@@ -89,6 +120,6 @@ class ModDetailsWindow(QDialog):
             with file as tmp_file:
                 shutil.copyfileobj(response, tmp_file)
         self.layout.removeWidget(self.installButton)
-        self.addUninstallButton(modfile)
+        self.addUninstallButton(modfile)        
         QMessageBox.information(self, "Adellphi", "Install Successful")
         

@@ -16,10 +16,53 @@ from controller.ModsController import ModsController
 
 class MainWindow(QWidget):
           
+  def searchMods(self):
+    term = self.searchBar.text()
+    print(term)
+    if term:
+      mods = ModsController.getSearchData(term)
+      self.clearGrid()
+      self.displayMods(mods)
+    else:
+      #FIXME this causes segmentation fault
+      mods = ModsController.getModsData()
+      self.clearGrid()
+      self.displayMods(mods)
+  def clearGrid(self):
+    while self.grid.count():
+      child = self.grid.takeAt(0)
+      if child.widget():
+        child.widget().deleteLater()
+
+  def displayMods(self,mods):
+    positions = [(i,j) for i in range(5) for j in range(4)]
+            
+    for position,item in zip(positions,mods):
+      imageUrl = "https://minifymods.com" + item['field_screenshots']
+      image = QPixmap()
+      image.loadFromData(urllib.request.urlopen(imageUrl).read())
+      imageLabel = GridItem(self.parent)
+      
+      imageLabel.title = item['title']
+      imageLabel.description = item['body']
+      imageLabel.compat = item['field_minecraft_compatibility']
+      imageLabel.modfile = item['field_mod_file']
+      imageLabel.image = image           
+      imageLabel.setPixmap(image.scaled(300, 200, Qt.KeepAspectRatio))
+      imageLabel.setFixedSize(300, 200)
+      imageLabel.mousePressEvent = imageLabel.Clicked
+      
+      self.grid.addWidget(imageLabel, *position)
+
   def __init__(self, parent):
     super(MainWindow, self).__init__(parent)
+    self.parent = parent
     self.layout = QVBoxLayout(self)
 
+    self.searchBar = QLineEdit()
+    self.searchBar.setPlaceholderText("Search Mods") 
+    self.searchBar.editingFinished.connect(self.searchMods)
+    self.layout.addWidget(self.searchBar)
     # Initialize tab screen
     self.tabs = QTabWidget()
     self.tab1 = QScrollArea()
@@ -35,31 +78,14 @@ class MainWindow(QWidget):
     self.tab1.layout = QVBoxLayout(self)
     self.grid = QGridLayout()
     #self.listWidget = ListItem()
-    #get data
-    mods = ModsController().getModsData()
 
     #gridmods = mods[:9]
     #listmods = mods[9:len(mods)]
 
 
-    positions = [(i,j) for i in range(5) for j in range(4)]
-            
-    for position,item in zip(positions,mods):
-      imageUrl = "https://minifymods.com" + item['field_screenshots']
-      image = QPixmap()
-      image.loadFromData(urllib.request.urlopen(imageUrl).read())
-      imageLabel = GridItem(parent)
-      
-      imageLabel.title = item['title']
-      imageLabel.description = item['body']
-      imageLabel.compat = item['field_minecraft_compatibility']
-      imageLabel.modfile = item['field_mod_file']
-      imageLabel.image = image           
-      imageLabel.setPixmap(image.scaled(300, 200, Qt.KeepAspectRatio))
-      imageLabel.setFixedSize(300, 200)
-      imageLabel.mousePressEvent = imageLabel.Clicked
-      
-      self.grid.addWidget(imageLabel, *position)
+    #get data
+    mods = ModsController().getModsData()
+    self.displayMods(mods)
   
       #TODO loop over listmods and add to an instance of myListWidget
 

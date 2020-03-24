@@ -18,6 +18,12 @@ class ModsController:
     data = urllib.request.urlopen(json_url).read().decode()
     return json.loads(data)
 
+  @staticmethod
+  def getSearchData(term):
+    json_url = "https://minifymods.com/api/mods?_format=json&search=" + term
+    data = urllib.request.urlopen(json_url).read().decode()
+    return json.loads(data)
+    
   def __init__(self):
     """ Virtually private constructor. """
     if ModsController.__instance != None:
@@ -36,6 +42,16 @@ class ModsController:
         return versions_directory
 
   @staticmethod
+  def getDotMinecraftDirectory():
+        if os.name == 'nt':
+            appData = os.getenv('APPDATA')
+            versions_directory = appData + "\\.minecraft\\"
+        else:
+            appData = str(Path.home())
+            versions_directory = appData + "/.minecraft/"
+        return versions_directory
+
+  @staticmethod
   def getModDirectory():
     if os.name == 'nt':
         appData = os.getenv('APPDATA')
@@ -44,3 +60,4 @@ class ModsController:
         appData = str(Path.home())
         mod_directory = appData + "/.minecraft/mods/"
     return mod_directory
+    
