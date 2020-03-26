@@ -11,6 +11,7 @@ import qtmodern.windows
 from pathlib import Path
 from controller.ModsController import ModsController
 import subprocess
+from library.pml.main import *
 
 class ModDetailsWindow(QDialog):
     def __init__(self, parent):
@@ -55,6 +56,7 @@ class ModDetailsWindow(QDialog):
                 self.addUninstallButton(mod.modfile)
             else:
                 self.addInstallButton(mod.modfile)
+            self.runbutton()
         else:
             self.missingForgeLabel = QLabel("Please create a MinecraftForge installation of version " + mod.compat + " to install this mod.")
             self.missingForgeLabel.setWordWrap(True)
@@ -91,6 +93,11 @@ class ModDetailsWindow(QDialog):
         self.layout.removeWidget(self.forgeInstallButton)
         QMessageBox.information(self, "Adellphi", "Forge v" + version + " Install Successful")
 
+    def runbutton (self):
+        self.runmc = QPushButton("Run")
+        self.runmc.clicked.connect(runminecraft)
+        self.layout.addWidget(self.runmc)
+                                                          
     def addUninstallButton(self, modfile):
         self.uninstallButton = QPushButton("Uninstall Mod")
         self.uninstallButton.clicked.connect(lambda: self.uninstall(modfile))
