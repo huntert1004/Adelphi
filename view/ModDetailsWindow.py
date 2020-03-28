@@ -24,17 +24,22 @@ class ModDetailsWindow(QDialog):
             test_filepath = os.path.join(mod_directory,filename)
             if os.path.isfile(test_filepath):
                 return True
-
-    def isForgeInstalled(self, modCompat):
+            
+    def getForgeVersion(self,modCompat):
         versions_directory = ModsController.getVersionsDirectory()
 
         modVersions = [x.strip() for x in modCompat.split(',')]
         for child in os.listdir(versions_directory):
             for modVersion in modVersions:
                 if (child.startswith(modVersion + "-forge")):
-                    test_path = os.path.join(versions_directory, child)
-                    if os.path.isdir(test_path):
-                        return True
+                    return child
+
+    def isForgeInstalled(self, modCompat):
+        forge_dir = self.getForgeVersion(modCompat)
+        versions_directory = ModsController.getVersionsDirectory()
+        test_path = os.path.join(versions_directory, forge_dir)
+        if os.path.isdir(test_path):
+            return True
             
     def __init__(self, mod, parent=None):
         super().__init__(parent)
@@ -50,13 +55,14 @@ class ModDetailsWindow(QDialog):
         self.layout.addWidget(self.descriptionLabel)
         self.layout.addWidget(QLabel("Minecraft Compatability: " + mod.compat))
         
+
         if (self.isForgeInstalled(mod.compat)):
 
             if (self.isModInstalled(mod.modfile)):
                 self.addUninstallButton(mod.modfile)
             else:
                 self.addInstallButton(mod.modfile)
-            self.runbutton()
+            self.runbutton(mod.compat)
         else:
             self.missingForgeLabel = QLabel("Please create a MinecraftForge installation of version " + mod.compat + " to install this mod.")
             self.missingForgeLabel.setWordWrap(True)
@@ -93,10 +99,13 @@ class ModDetailsWindow(QDialog):
         self.layout.removeWidget(self.forgeInstallButton)
         QMessageBox.information(self, "Adellphi", "Forge v" + version + " Install Successful")
 
-    def runbutton (self):
+    def runbutton (self, modcompat):
         self.runmc = QPushButton("Run")
-        self.runmc.clicked.connect(runminecraft)
+        forge_version = self.getForgeVersion(modcompat)
+        self.runmc.clicked.connect(lambda: runminecraft(forge_version))
         self.layout.addWidget(self.runmc)
+    
+
                                                           
     def addUninstallButton(self, modfile):
         self.uninstallButton = QPushButton("Uninstall Mod")
