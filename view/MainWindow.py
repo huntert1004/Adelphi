@@ -13,7 +13,6 @@ from pathlib import Path
 from view.GridItem import GridItem
 from view.ListItem import ListItem
 from controller.ModsController import ModsController
-
 class MainWindow(QWidget):
   def searchMods(self):
     term = self.searchBar.text()

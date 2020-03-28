@@ -60,4 +60,7 @@ class ModsController:
         appData = str(Path.home())
         mod_directory = appData + "/.minecraft/mods/"
     return mod_directory
+  
+
+
     

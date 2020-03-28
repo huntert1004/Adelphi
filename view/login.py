@@ -1,37 +1,9 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
-import json
-import os
-import shutil
-import urllib.request
-import qtmodern.styles
-import qtmodern.windows
-from view.MainWindow import MainWindow
-class App(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        self.title = 'Adellphi'
-        self.left = 0
-        self.top = 0
-        self.width = 1200
-        self.height = 900
-        self.setWindowTitle(self.title)
-        self.setGeometry(self.left, self.top, self.width, self.height)
-        self.table_widget = MainWindow(self)
-        self.setCentralWidget(self.table_widget)
-        #self.show()
-        
-        mw = qtmodern.windows.ModernWindow(self)
-        mw.show()
-class Ui_Dialog(object):
+class Login(object):
     def setupUi(self, Dialog):  
             Dialog.setObjectName("Dialog")  
             Dialog.resize(812, 632)  
             Dialog.setStyleSheet("background-color: rgb(0, 170, 255);")  
-            self.frame = QtWidgets.QFrame(Dialog)  
-            self.frame.setGeometry(QtCore.QRect(90, 80, 631, 461))  
+            self.frame = QtWidgets.QFrame(Dialog)    
             self.frame.setStyleSheet("background-color: rgb(255, 255, 255);")  
             self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)  
             self.frame.setFrameShadow(QtWidgets.QFrame.Raised)  
@@ -81,26 +53,9 @@ class Ui_Dialog(object):
   
     def retranslateUi(self, Dialog):  
         _translate = QtCore.QCoreApplication.translate  
-        Dialog.setWindowTitle(_translate("Dialog", "Adellphi"))  
         self.label.setText(_translate("Dialog", "Adellphi"))  
         self.label_2.setText(_translate("Dialog", "User Name"))  
         self.label_3.setText(_translate("Dialog", "Password"))  
         self.pushButton.setText(_translate("Dialog", "Log in"))  
         self.pushButton_2.setText(_translate("Dialog", "Sign up"))  
         self.pushButton.clicked.connect(lambda: self.MainWindow)
-if __name__ == '__main__':
-    import sys 
-    app = QApplication(sys.argv)
-    splash = QSplashScreen(QPixmap('images/ss.png'))
-    splash.show()
-    QTimer.singleShot(2000, splash.close)
-    qtmodern.styles.dark(app)
-    Dialog = QtWidgets.QDialog()  
-    ui = Ui_Dialog()  
-    ui.setupUi(Dialog)  
-    Dialog.show()  
-    ex = App()
-    sys.exit(app.exec_())
-    
- 
-    

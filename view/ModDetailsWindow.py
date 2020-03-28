@@ -139,3 +139,4 @@ class ModDetailsWindow(QDialog):
         self.addUninstallButton(modfile)        
         QMessageBox.information(self, "Adellphi", "Install Successful")
         
+  

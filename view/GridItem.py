@@ -14,12 +14,6 @@ class GridItem(QLabel):
     def __init__(self, parent):
       super(GridItem, self).__init__(parent)
       self.parent = parent
-
-    @pyqtSlot(QLabel)
-    def _createSplashScreen(self):
-        return QSplashScreen(QPixmap(Resources.getPath(Resources.Images, self.getApplicationName() + "images/hi.png")))
-        hi = qtmodern.windows.QSplashScreen()
-        hi.show()
     @pyqtSlot(QLabel)
     def Clicked(self,event):
       #print(event)
