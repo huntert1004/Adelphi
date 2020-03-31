@@ -62,7 +62,7 @@ class MainWindow(QWidget):
 
     self.browser = Browser()
     self.browser.setFixedSize(QSize(1200, 100))
-    self.browser.load("https://minifymods.com")
+    self.browser.load("https://minifymods.com/ad.html")
     self.layout.addWidget(self.browser)
     
     self.searchBar = QLineEdit()
