@@ -13,7 +13,10 @@ from pathlib import Path
 from view.GridItem import GridItem
 from view.ListItem import ListItem
 from controller.ModsController import ModsController
+from view.Browser import Browser
+
 class MainWindow(QWidget):
+
   def searchMods(self):
     term = self.searchBar.text()
     print(term)
@@ -57,6 +60,11 @@ class MainWindow(QWidget):
     self.parent = parent
     self.layout = QVBoxLayout(self)
 
+    self.browser = Browser()
+    self.browser.setFixedSize(QSize(1200, 100))
+    self.browser.load("https://minifymods.com")
+    self.layout.addWidget(self.browser)
+    
     self.searchBar = QLineEdit()
     self.searchBar.setPlaceholderText("Search Mods") 
     self.searchBar.editingFinished.connect(self.searchMods)
