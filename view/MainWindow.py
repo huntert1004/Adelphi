@@ -14,6 +14,7 @@ from view.GridItem import GridItem
 from view.ListItem import ListItem
 from controller.ModsController import ModsController
 from view.Browser import Browser
+from view.Slides import Slides
 
 class MainWindow(QWidget):
 
@@ -85,7 +86,14 @@ class MainWindow(QWidget):
     self.grid = QGridLayout()
     #self.listWidget = ListItem()
 
-    #gridmods = mods[:9]
+    slidemods = mods[:5]
+    image_files = []
+    for mod in slidemods:
+      imageUrl = "https://minifymods.com" + mod['field_screenshots']
+      image_files.append(imageUrl)
+
+    self.slides_widget = Slides(image_files, self)
+    self.layout.addWidget(slides_widget)
     #listmods = mods[9:len(mods)]
 
 

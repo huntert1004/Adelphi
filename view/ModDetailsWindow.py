@@ -11,7 +11,7 @@ import qtmodern.windows
 from pathlib import Path
 from controller.ModsController import ModsController
 import subprocess
-from library.pml.main import *
+#from library.pml.main import *
 
 class ModDetailsWindow(QDialog):
     def __init__(self, parent):
