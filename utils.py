@@ -1,74 +1,85 @@
-from PyQt5 import QtCore, QtGui, QtWidgets  
-  
-class Ui_Dialog(object):  
-    def setupUi(self, Dialog):  
-        Dialog.setObjectName("Dialog")  
-        Dialog.resize(812, 632)  
-        Dialog.setStyleSheet("background-color: rgb(0, 170, 255);")  
-        self.frame = QtWidgets.QFrame(Dialog)  
-        self.frame.setGeometry(QtCore.QRect(90, 80, 631, 461))  
-        self.frame.setStyleSheet("background-color: rgb(255, 255, 255);")  
-        self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)  
-        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)  
-        self.frame.setObjectName("frame")  
-        self.label = QtWidgets.QLabel(self.frame)  
-        self.label.setGeometry(QtCore.QRect(230, 80, 171, 51))  
-        font = QtGui.QFont()  
-        font.setPointSize(16)  
-        self.label.setFont(font)  
-        self.label.setStyleSheet("color: rgb(o, 0, 0);")  
-        self.label.setObjectName("label")  
-        self.label_2 = QtWidgets.QLabel(self.frame)  
-        self.label_2.setGeometry(QtCore.QRect(90, 190, 121, 31))  
-        font = QtGui.QFont()  
-        font.setPointSize(12)  
-        self.label_2.setFont(font)  
-        self.label_2.setObjectName("label_2")  
-        self.label_3 = QtWidgets.QLabel(self.frame)  
-        self.label_3.setGeometry(QtCore.QRect(90, 260, 121, 21))  
-        font = QtGui.QFont()  
-        font.setPointSize(12)  
-        self.label_3.setFont(font)  
-        self.label_3.setObjectName("label_3")  
-        self.lineEdit = QtWidgets.QLineEdit(self.frame)  
-        self.lineEdit.setGeometry(QtCore.QRect(260, 190, 231, 31))  
-        self.lineEdit.setStyleSheet("background-color: rgb(209, 207, 255);")  
-        self.lineEdit.setObjectName("lineEdit")  
-        self.lineEdit_2 = QtWidgets.QLineEdit(self.frame)  
-        self.lineEdit_2.setGeometry(QtCore.QRect(260, 260, 231, 31))  
-        self.lineEdit_2.setStyleSheet("background-color:#d1cfff;")  
-        self.lineEdit_2.setEchoMode(QtWidgets.QLineEdit.Password)  
-        self.lineEdit_2.setObjectName("lineEdit_2")  
-        self.pushButton = QtWidgets.QPushButton(self.frame)  
-        self.pushButton.setGeometry(QtCore.QRect(350, 360, 161, 41))  
-        font = QtGui.QFont()  
-        font.setPointSize(14)  
-        self.pushButton.setFont(font)  
-        self.pushButton.setStyleSheet("background-color: rgb(0, 170, 0);")  
-        self.pushButton.setObjectName("pushButton")  
-        self.pushButton_2 = QtWidgets.QPushButton(self.frame)  
-        self.pushButton_2.setGeometry(QtCore.QRect(220, 360, 101, 41))  
-        self.pushButton_2.setStyleSheet("background-color:#ffff7f;")  
-        self.pushButton_2.setObjectName("pushButton_2")  
-  
-        self.retranslateUi(Dialog)  
-        QtCore.QMetaObject.connectSlotsByName(Dialog)  
-  
-    def retranslateUi(self, Dialog):  
-        _translate = QtCore.QCoreApplication.translate  
-        Dialog.setWindowTitle(_translate("Dialog", "Adellphi"))  
-        self.label.setText(_translate("Dialog", "Adellphi"))  
-        self.label_2.setText(_translate("Dialog", "User Name"))  
-        self.label_3.setText(_translate("Dialog", "Password"))  
-        self.pushButton.setText(_translate("Dialog", "Log in"))  
-        self.pushButton_2.setText(_translate("Dialog", "Sign up"))  
-  
-  
-if __name__ == "__main__":  
-    import sys  
-    app = QtWidgets.QApplication(sys.argv)  
-    Dialog = QtWidgets.QDialog()  
-    ui = Ui_Dialog()  
-    ui.setupUi(Dialog)  
-    Dialog.show()  
-    sys.exit(app.exec_())  
+from PyQt5
+ import QtCore, QtGui
+import sys
+
+try:
+    _fromUtf8 = QtCore.QString.fromUtf8
+except AttributeError:
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
+
+
+class MainWindow(QtGui.QMainWindow):
+                #(self,  parent=None) <- original code
+    def __init__(self, image_files, parent=None):
+        QtGui.QMainWindow.__init__(self,  parent)
+        self.setupUi(self)
+
+        #Initialized Widget here
+        self.slides_widget = Slides(self)
+        self.setCentralWidget(self.slides_widget)
+
+    def setupUi(self, Form):
+        Form.setObjectName(_fromUtf8("Form"))
+        Form.resize(1012, 532)
+
+        self.tabWidget = QtGui.QTabWidget(Form)
+        self.tabWidget.setGeometry(QtCore.QRect(470, 130, 451, 301))
+        self.tabWidget.setObjectName(_fromUtf8("tabWidget"))
+
+        self.retranslateUi(Form)
+        QtCore.QMetaObject.connectSlotsByName(Form)
+
+    def retranslateUi(self, Form):
+        Form.setWindowTitle(_translate("Form", "Form", None))
+
+
+
+class Slides(QtGui.QWidget):
+    def __init__(self, image_files, parent=None):
+        QtGui.QWidget.__init__(self, parent)
+
+        self.image_files = image_files
+        self.label = QtGui.QLabel("", self)
+        self.label.setGeometry(50, 150, 450, 350)
+
+        #button
+        self.button = QtGui.QPushButton(". . .", self)
+        self.button.setGeometry(200, 100, 140, 30)
+        self.button.clicked.connect(self.timerEvent)
+        self.timer = QtCore.QBasicTimer()
+        self.step = 0
+        self.delay = 3000 #ms
+        sTitle = "DIT Erasmus Page : {} seconds"
+        self.setWindowTitle(sTitle.format(self.delay/1000.0))
+
+
+    def timerEvent(self, e=None):
+        if self.step >= len(self.image_files):
+            self.timer.start(self.delay, self)
+            self.step = 0
+            return
+        self.timer.start(self.delay, self)
+        file = self.image_files[self.step]
+        image = QPixmap(file)
+        self.label.setPixmap(image)
+        self.setWindowTitle("{} --> {}".format(str(self.step), file))
+        self.step += 1
+
+image_files = ["slide1.jpg", "slide2.jpg", "slide3.jpg", "slide4.jpg"]
+
+
+if __name__ == "__main__":
+    app = QtGui.QApplication(sys.argv)
+    Form = MainWindow(image_files)
+    ui = MainWindow(image_files)
+    Form.show()
+    sys.exit(app.exec_())

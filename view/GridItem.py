@@ -11,9 +11,12 @@ class GridItem(QLabel):
     compat = ''
     modfile = ''
     
+    
+    
     def __init__(self, parent):
       super(GridItem, self).__init__(parent)
       self.parent = parent
+     
     @pyqtSlot(QLabel)
     def Clicked(self,event):
       #print(event)

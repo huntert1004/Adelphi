@@ -54,10 +54,14 @@ class MainWindow(QWidget):
       imageLabel.setFixedSize(300, 200)
       imageLabel.mousePressEvent = imageLabel.Clicked
       
-      self.grid.addWidget(imageLabel, *position)
-
+      self.grid.addWidget(imageLabel, *position,)
+      
   def __init__(self, parent):
     super(MainWindow, self).__init__(parent)
+    
+     #get data for entire view
+    mods = ModsController().getModsData()
+    
     self.parent = parent
     self.layout = QVBoxLayout(self)
 
@@ -70,47 +74,117 @@ class MainWindow(QWidget):
     self.searchBar.setPlaceholderText("Search Mods") 
     self.searchBar.editingFinished.connect(self.searchMods)
     self.layout.addWidget(self.searchBar)
+    
     # Initialize tab screen
     self.tabs = QTabWidget()
-    self.tab1 = QScrollArea()
-    self.tab2 = QWidget()
-    self.tabs.resize(300,200)
-    self.tab1.setWidgetResizable(True)
+    self.tab1scroll = QScrollArea()             # Scroll Area which contains the widgets, set as the centralWidget
+    self.tab1widget = QWidget()                 # Widget that contains the collection of Vertical Box
+    self.tab1vbox = QVBoxLayout()               # The Vertical Box that contains the Horizontal Boxes of  labels and buttons
+
+
+    #add content into the tab1vbox
+    #add top featured mod
+    self.topmod = QLabel("", self)
+    self.topmod.setGeometry(0, 0, 1200, 300)
+    imageUrl = "https://minifymods.com" + mods[0]['field_screenshots']
+    image = QPixmap()
+    image.loadFromData(urllib.request.urlopen(imageUrl).read())
+    self.topmod.setPixmap(image.scaled(1200, 300, Qt.KeepAspectRatio))
+    self.tab1vbox.addWidget(self.topmod)
+    
+    #add row of other featured mods
+    self.featuredModsWidget = QWidget()
+    self.featuredModsLayout = QHBoxLayout()
+    
+    #2nd feature mod
+    self.secondtopmod = QLabel("", self)
+    self.secondtopmod.setGeometry(0, 0, 400, 300)
+    secondimageUrl = "https://minifymods.com" + mods[1]['field_screenshots']
+    secondimage = QPixmap()
+    secondimage.loadFromData(urllib.request.urlopen(secondimageUrl).read())
+    self.secondtopmod.setPixmap(secondimage.scaled(400, 300, Qt.KeepAspectRatio))
+    self.featuredModsLayout.addWidget(self.secondtopmod)
+    
+    #3rd feature mod
+    self.thirdtopmod = QLabel("", self)
+    self.thirdtopmod.setGeometry(0, 0, 400, 300)
+    thirdimageUrl = "https://minifymods.com" + mods[2]['field_screenshots']
+    thirdimage = QPixmap()
+    thirdimage.loadFromData(urllib.request.urlopen(thirdimageUrl).read())
+    self.thirdtopmod.setPixmap(thirdimage.scaled(400, 300, Qt.KeepAspectRatio))
+    self.featuredModsLayout.addWidget(self.thirdtopmod)
+    
+    #4th feature mod
+    self.fourthtopmod = QLabel("", self)
+    self.fourthtopmod.setGeometry(0, 0, 400, 300)
+    fourthimageUrl = "https://minifymods.com" + mods[3]['field_screenshots']
+    fourthimage = QPixmap()
+    fourthimage.loadFromData(urllib.request.urlopen(fourthimageUrl).read())
+    self.fourthtopmod.setPixmap(fourthimage.scaled(400, 300, Qt.KeepAspectRatio))
+    self.featuredModsLayout.addWidget(self.fourthtopmod)
+    
+    self.featuredModsWidget.setLayout(self.featuredModsLayout)
+    
+    self.tab1vbox.addWidget(self.featuredModsWidget)
+
+    #add grid
+    self.gridWidget = QWidget()
+    self.grid = QGridLayout()      
+    
+    self.displayMods(mods)
+    
+    self.gridWidget.setLayout(self.grid)
+    self.tab1vbox.addWidget(self.gridWidget)
+    
+    
+    ##### FINALIZE TAB1 #####
+    #now set tab1widget layout
+    self.tab1widget.setLayout(self.tab1vbox)
     
     # Add tabs
-    self.tabs.addTab(self.tab1,"Mods")
+    self.tabs.addTab(self.tab1scroll,"Mods")
+    #Scroll Area Properties
+    self.tab1scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+    self.tab1scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+    self.tab1scroll.setWidgetResizable(True)
+    self.tab1scroll.setWidget(self.tab1widget)
+    
+    
+    #Finalize screen
+    self.layout.addWidget(self.tabs)
+    self.setLayout(self.layout)
+    ############################################# NEEDS TO BE REFACTORED BELOW #######################
+    
+    #self.tab2 = QWidget()
+    #self.tabs.resize(300,200)
+    #self.tab1scroll.setWidgetResizable(True)
+    
+    
     #self.tabs.addTab(self.tab2,"Tab 2")
     
     # Create first tab
-    self.tab1.layout = QVBoxLayout(self)
-    self.grid = QGridLayout()
+    
     #self.listWidget = ListItem()
 
-    slidemods = mods[:5]
-    image_files = []
-    for mod in slidemods:
-      imageUrl = "https://minifymods.com" + mod['field_screenshots']
-      image_files.append(imageUrl)
-
-    self.slides_widget = Slides(image_files, self)
-    self.layout.addWidget(slides_widget)
+    
     #listmods = mods[9:len(mods)]
 
 
-    #get data
-    mods = ModsController().getModsData()
-    self.displayMods(mods)
+  
+
+    
+    
   
       #TODO loop over listmods and add to an instance of myListWidget
 
       #possibly do this
       #self.grid.addWidget(listWidget)
 
-    self.tab1.layout.addLayout(self.grid)
-    self.tab1.setLayout(self.tab1.layout)
-    # add grid to tab1
+    #self.tab1vbox.addLayout(self.grid)
+    #self.tab1scroll.setLayout(self.tab1scroll.layout)
+    # add grid to tab1scroll
     # Add tabs to widget
-    self.layout.addWidget(self.tabs)
-    self.setLayout(self.layout)
-      
+    
+    
+
   

@@ -6,7 +6,7 @@ import urllib.request
 class Slides(QWidget):
     def __init__(self, image_files, parent=None):
         QWidget.__init__(self, parent)
-
+        print(image_files)
         self.image_files = image_files
         self.label = QLabel("", self)
         self.label.setGeometry(50, 150, 450, 350)
@@ -29,6 +29,7 @@ class Slides(QWidget):
             return
         self.timer.start(self.delay, self)
         file = self.image_files[self.step]
+        print(file)
         image = QPixmap()
         image.loadFromData(urllib.request.urlopen(file).read())
         self.label.setPixmap(image)

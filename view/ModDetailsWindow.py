@@ -12,6 +12,7 @@ from pathlib import Path
 from controller.ModsController import ModsController
 import subprocess
 from library.pml.main import *
+from view.LoginDialog import LoginDialog
 
 class ModDetailsWindow(QDialog):
     def __init__(self, parent):
@@ -37,7 +38,8 @@ class ModDetailsWindow(QDialog):
     def isForgeInstalled(self, modCompat):
         forge_dir = self.getForgeVersion(modCompat)
         versions_directory = ModsController.getVersionsDirectory()
-        test_path = os.path.join(versions_directory, forge_dir)
+        if (versions_directory):
+            test_path = os.path.join(versions_directory, forge_dir)
         if os.path.isdir(test_path):
             return True
             
@@ -101,7 +103,7 @@ class ModDetailsWindow(QDialog):
 
     def runbutton (self, modcompat):
         self.runmc = QPushButton("Run")
-        forge_version = self.getForgeVersion(modcompat)
+        forge_version = self.getForgeVersion(modcompat)        
         self.runmc.clicked.connect(lambda: runminecraft(forge_version))
         self.layout.addWidget(self.runmc)
     
