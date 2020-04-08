@@ -40,19 +40,16 @@ class MainWindow(QWidget):
     positions = [(i,j) for i in range(5) for j in range(4)]
             
     for position,item in zip(positions,mods):
-      imageUrl = "https://minifymods.com" + item['field_screenshots']
-      image = QPixmap()
-      image.loadFromData(urllib.request.urlopen(imageUrl).read())
+      
+      
       imageLabel = GridItem(self.parent)
       
-      imageLabel.title = item['title']
-      imageLabel.description = item['body']
-      imageLabel.compat = item['field_minecraft_compatibility']
-      imageLabel.modfile = item['field_mod_file']
-      imageLabel.image = image           
-      imageLabel.setPixmap(image.scaled(300, 200, Qt.KeepAspectRatio))
-      imageLabel.setFixedSize(300, 200)
-      imageLabel.mousePressEvent = imageLabel.Clicked
+      imageLabel.mod.title = item['title']
+      imageLabel.mod.description = item['body']
+      imageLabel.mod.compat = item['field_minecraft_compatibility']
+      imageLabel.mod.modfile = item['field_mod_file']
+      imageLabel.mod.imageUrl = "https://minifymods.com" + item['field_screenshots']
+      imageLabel.create(self)
       
       self.grid.addWidget(imageLabel, *position,)
       
