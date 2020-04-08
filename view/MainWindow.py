@@ -9,12 +9,14 @@ import urllib.request
 import qtmodern.styles
 import qtmodern.windows
 from pathlib import Path
-
+from view.ModDetailsWindow import ModDetailsWindow
 from view.GridItem import GridItem
 from view.ListItem import ListItem
 from controller.ModsController import ModsController
 from view.Browser import Browser
 from view.Slides import Slides
+from model.Mod import Mod
+
 
 class MainWindow(QWidget):
 
@@ -40,10 +42,8 @@ class MainWindow(QWidget):
     positions = [(i,j) for i in range(5) for j in range(4)]
             
     for position,item in zip(positions,mods):
-      
-      
-      imageLabel = GridItem(self.parent)
-      
+            
+      imageLabel = GridItem(self.parent)      
       imageLabel.mod.title = item['title']
       imageLabel.mod.description = item['body']
       imageLabel.mod.compat = item['field_minecraft_compatibility']
@@ -53,6 +53,16 @@ class MainWindow(QWidget):
       
       self.grid.addWidget(imageLabel, *position,)
       
+  @pyqtSlot(QLabel)
+  def topClicked(self, event):
+    #print(event)
+    modDetail = ModDetailsWindow(self.topmod)
+    modDetail.setGeometry(100, 200, 100, 100)
+    modDetail.setModal(True)
+    #modDetail.show()
+    mw = qtmodern.windows.ModernWindow(modDetail)
+    mw.show()    
+    
   def __init__(self, parent):
     super(MainWindow, self).__init__(parent)
     
@@ -81,13 +91,24 @@ class MainWindow(QWidget):
 
     #add content into the tab1vbox
     #add top featured mod
-    self.topmod = QLabel("", self)
-    self.topmod.setGeometry(0, 0, 1200, 300)
-    imageUrl = "https://minifymods.com" + mods[0]['field_banner']
+    self.topmodLabel = QLabel("", self)
+    self.topmodLabel.setGeometry(0, 0, 1200, 300)
+    item = mods[0]
+    imageUrl = "https://minifymods.com" + item['field_banner']
     image = QPixmap()
     image.loadFromData(urllib.request.urlopen(imageUrl).read())
-    self.topmod.setPixmap(image.scaled(1200, 400, Qt.KeepAspectRatio))
-    self.tab1vbox.addWidget(self.topmod)
+    self.topmodLabel.setPixmap(image.scaled(1200, 400, Qt.KeepAspectRatio))
+    self.tab1vbox.addWidget(self.topmodLabel)
+    self.topmod = Mod()
+    self.topmod.title = item['title']
+    self.topmod.description = item['body']
+    self.topmod.compat = item['field_minecraft_compatibility']
+    self.topmod.modfile = item['field_mod_file']
+    self.topmod.imageUrl = "https://minifymods.com" + item['field_screenshots']
+    self.topmod.image = QPixmap()
+    self.topmod.image.loadFromData(urllib.request.urlopen(self.topmod.imageUrl).read())
+    
+    self.topmodLabel.mousePressEvent = self.topClicked
     
     #add row of other featured mods
     self.featuredModsWidget = QWidget()
@@ -150,38 +171,7 @@ class MainWindow(QWidget):
     #Finalize screen
     self.layout.addWidget(self.tabs)
     self.setLayout(self.layout)
-    ############################################# NEEDS TO BE REFACTORED BELOW #######################
-    
-    #self.tab2 = QWidget()
-    #self.tabs.resize(300,200)
-    #self.tab1scroll.setWidgetResizable(True)
-    
-    
-    #self.tabs.addTab(self.tab2,"Tab 2")
-    
-    # Create first tab
-    
-    #self.listWidget = ListItem()
 
-    
-    #listmods = mods[9:len(mods)]
-
-
-  
-
-    
-    
-  
-      #TODO loop over listmods and add to an instance of myListWidget
-
-      #possibly do this
-      #self.grid.addWidget(listWidget)
-
-    #self.tab1vbox.addLayout(self.grid)
-    #self.tab1scroll.setLayout(self.tab1scroll.layout)
-    # add grid to tab1scroll
-    # Add tabs to widget
-    
     
 
   

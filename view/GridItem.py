@@ -2,25 +2,18 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from view.ModDetailsWindow import ModDetailsWindow
+from model.Mod import Mod
 import qtmodern
 import urllib.request
 
 class GridItem(QWidget):
-    mod = None
-    class Mod():
-      title = ''
-      imageUrl = ''
-      description = ''
-      compat = ''
-      modfile = ''
-      image = None
-    
-    
+    mod = None     
     
     def __init__(self, parent):
       super(GridItem, self).__init__(parent)
       self.parent = parent
-      self.mod = self.Mod()
+      self.mod = Mod()
+      self.setFixedSize(300, 250)
     
     def create(self, parent):
       
@@ -38,6 +31,7 @@ class GridItem(QWidget):
       
       self.textLabel = QLabel(self.mod.title)
       self.textLabel.mousePressEvent = self.clicked
+      self.textLabel.setFixedSize(300, 20)
       self.layout.addWidget(self.textLabel)
       
       self.setLayout(self.layout)
