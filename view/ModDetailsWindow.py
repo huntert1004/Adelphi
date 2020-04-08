@@ -38,10 +38,11 @@ class ModDetailsWindow(QDialog):
     def isForgeInstalled(self, modCompat):
         forge_dir = self.getForgeVersion(modCompat)
         versions_directory = ModsController.getVersionsDirectory()
-        if (versions_directory):
+        
+        if (versions_directory and forge_dir):
             test_path = os.path.join(versions_directory, forge_dir)
-        if os.path.isdir(test_path):
-            return True
+            if os.path.isdir(test_path):
+                return True
             
     def __init__(self, mod, parent=None):
         super().__init__(parent)
@@ -80,7 +81,7 @@ class ModDetailsWindow(QDialog):
         forgeDownloadUrl = "";
  
         if (version == "1.15.2"):
-            forgeDownloadUrl = "https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.15.2-31.1.0/forge-1.15.2-31.1.0-installer.jar"
+            forgeDownloadUrl = "https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.15.2-31.1.37/forge-1.15.2-31.1.37-installer.jar"
         elif (version == "1.12.2"):
             forgeDownloadUrl = "https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.12.2-14.23.5.2768/forge-1.12.2-14.23.5.2768-installer.jar"
         elif (version == "1.8.9"):

@@ -65,10 +65,10 @@ class MainWindow(QWidget):
     self.parent = parent
     self.layout = QVBoxLayout(self)
 
-    self.browser = Browser()
-    self.browser.setFixedSize(QSize(1200, 100))
-    self.browser.load("https://minifymods.com/ad.html")
-    self.layout.addWidget(self.browser)
+    #self.browser = Browser()
+    #self.browser.setFixedSize(QSize(1200, 100))
+    #self.browser.load("https://minifymods.com/ad.html")
+    #self.layout.addWidget(self.browser)
     
     self.searchBar = QLineEdit()
     self.searchBar.setPlaceholderText("Search Mods") 
@@ -86,10 +86,10 @@ class MainWindow(QWidget):
     #add top featured mod
     self.topmod = QLabel("", self)
     self.topmod.setGeometry(0, 0, 1200, 300)
-    imageUrl = "https://minifymods.com" + mods[0]['field_screenshots']
+    imageUrl = "https://minifymods.com" + mods[0]['field_banner']
     image = QPixmap()
     image.loadFromData(urllib.request.urlopen(imageUrl).read())
-    self.topmod.setPixmap(image.scaled(1200, 300, Qt.KeepAspectRatio))
+    self.topmod.setPixmap(image.scaled(1200, 400, Qt.KeepAspectRatio))
     self.tab1vbox.addWidget(self.topmod)
     
     #add row of other featured mods

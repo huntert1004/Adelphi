@@ -3,8 +3,8 @@ Layout
 - Browserview ad
 - Searchbar
 - Scrollable Area
-	Widget
-		VBox
+	VBoxLayout
+		Widget
 			- HBox
 				- QLabel main featured mod | Qlabel of 2nd featured mod
 			- HBox Horizontal box
