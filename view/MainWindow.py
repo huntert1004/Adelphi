@@ -13,7 +13,7 @@ from view.ModDetailsWindow import ModDetailsWindow
 from view.GridItem import GridItem
 from view.ListItem import ListItem
 from controller.ModsController import ModsController
-from view.Browser import Browser
+#from view.Browser import Browser
 from view.Slides import Slides
 from model.Mod import Mod
 
@@ -22,21 +22,83 @@ class MainWindow(QWidget):
 
   def searchMods(self):
     term = self.searchBar.text()
-    print(term)
+    
     if term:
       mods = ModsController.getSearchData(term)
-      self.clearGrid()
-      self.displayMods(mods)
-    else:
-      #FIXME this causes segmentation fault
-      mods = ModsController.getModsData()
-      self.clearGrid()
-      self.displayMods(mods)
-  def clearGrid(self):
-    while self.grid.count():
-      child = self.grid.takeAt(0)
+      self.createSearchTab()
+      self.displaySearch(mods)
+
+  def createSearchTab(self):
+    if not hasattr(self, 'searchTabScroll'):
+      self.searchTabScroll = QScrollArea()
+      self.searchTabWidget = QWidget()
+      self.searchTabVBoxLayout = QVBoxLayout()
+
+      # Add tabs
+      self.searchTabWidget.setLayout(self.searchTabVBoxLayout)
+      self.tabs.addTab(self.searchTabScroll,"Search")
+      self.tabs.setCurrentIndex(1)
+      #Scroll Area Properties
+      self.searchTabVBoxLayout.setAlignment(Qt.AlignTop)
+      self.searchTabScroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+      self.searchTabScroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+      self.searchTabScroll.setWidgetResizable(True)
+      self.searchTabScroll.setWidget(self.searchTabWidget)
+    
+
+    self.clearSearchResults()
+    
+
+  
+  def clearSearchResults(self):
+    while self.searchTabVBoxLayout.count():
+      child = self.searchTabVBoxLayout.takeAt(0)
       if child.widget():
         child.widget().deleteLater()
+
+    self.searchTitle = QLabel("Search Results")
+    self.searchTitle.setStyleSheet("font-weight: bold; font-size: 200%")
+    self.searchTabVBoxLayout.addWidget(self.searchTitle)
+
+  def displaySearch(self,mods):
+    #positions = [(i,j) for i in range(5) for j in range(4)]
+            
+    #for position,item in zip(positions,mods):
+    for item in mods:
+      resultWidget = QWidget()
+      resultLayout = QHBoxLayout()
+      resultLayout.setAlignment(Qt.AlignLeft)
+      
+      mod = Mod() 
+      mod.title = item['title']
+      mod.description = item['body']
+      mod.compat = item['field_minecraft_compatibility']
+      mod.modfile = item['field_mod_file']
+      mod.imageUrl = "https://minifymods.com" + item['field_screenshots']
+      mod.image = QPixmap()
+      mod.image.loadFromData(urllib.request.urlopen(mod.imageUrl).read())
+      
+      @pyqtSlot(QLabel)
+      def searchClick(event):
+        modDetail = ModDetailsWindow(mod)
+        modDetail.setGeometry(100, 200, 100, 100)
+        modDetail.setModal(True)
+        mw = qtmodern.windows.ModernWindow(modDetail)
+        mw.show()   
+      
+      
+      imageLabel = QLabel()
+      imageLabel.setPixmap(mod.image.scaled(100, 67, Qt.KeepAspectRatio))
+      imageLabel.mousePressEvent = searchClick
+      resultLayout.addWidget(imageLabel)
+
+      textLabel = QLabel(item['title'])
+      resultLayout.addWidget(textLabel)
+
+      
+
+      resultWidget.setLayout(resultLayout)
+      self.searchTabVBoxLayout.addWidget(resultWidget)
 
   def displayMods(self,mods):
     positions = [(i,j) for i in range(5) for j in range(4)]
@@ -63,6 +125,7 @@ class MainWindow(QWidget):
     mw = qtmodern.windows.ModernWindow(modDetail)
     mw.show()   
    
+  
   @pyqtSlot(QLabel)
   def secondClicked(self, event):
   #print(event)
@@ -72,6 +135,7 @@ class MainWindow(QWidget):
     #modDetail.show()
     mw = qtmodern.windows.ModernWindow(modDetail)
     mw.show() 
+  
   @pyqtSlot(QLabel)
   def thirdClicked(self, event):
   #print(event)
@@ -81,6 +145,7 @@ class MainWindow(QWidget):
     #modDetail.show()
     mw = qtmodern.windows.ModernWindow(modDetail)
     mw.show()
+  
   @pyqtSlot(QLabel)
   def fourthClicked(self, event):
   #print(event)
