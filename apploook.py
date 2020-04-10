@@ -36,7 +36,7 @@ if __name__ == '__main__':
     splash.show()
     app.processEvents()
     QTimer.singleShot(1000, splash.close)
-    qtmodern.styles.dark(app)
+    qtmodern.styles.light(app)
     ex = App()
     sys.exit(app.exec_())
     
