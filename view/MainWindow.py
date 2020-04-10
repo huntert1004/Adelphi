@@ -124,9 +124,7 @@ class MainWindow(QWidget):
     self.topmodLabel = QLabel("", self)
     self.topmodLabel.setGeometry(0, 0, 1200, 300)
     item = mods[0]
-    imageUrl = "https://minifymods.com" + item['field_banner']
-    image = QPixmap()
-    image.loadFromData(urllib.request.urlopen(imageUrl).read())
+    image = QPixmap("images/New Project.png")
     self.topmodLabel.setPixmap(image.scaled(1200, 400, Qt.KeepAspectRatio))
     self.tab1vbox.addWidget(self.topmodLabel)
     self.topmod = Mod()
@@ -138,7 +136,7 @@ class MainWindow(QWidget):
     self.topmod.image = QPixmap()
     self.topmod.image.loadFromData(urllib.request.urlopen(self.topmod.imageUrl).read())
     
-    self.topmodLabel.mousePressEvent = self.topClicked
+    
     
     #add row of other featured mods
     self.featuredModsWidget = QWidget()
