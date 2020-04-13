@@ -80,11 +80,7 @@ class MainWindow(QWidget):
       
       @pyqtSlot(QLabel)
       def searchClick(event):
-        modDetail = ModDetailsWindow(mod)
-        modDetail.setGeometry(100, 200, 100, 100)
-        modDetail.setModal(True)
-        mw = qtmodern.windows.ModernWindow(modDetail)
-        mw.show()   
+        self.modClicked(mod)   
       
       
       imageLabel = QLabel()
@@ -114,47 +110,30 @@ class MainWindow(QWidget):
       imageLabel.create(self)
       
       self.grid.addWidget(imageLabel, *position,)
-      
-  @pyqtSlot(QLabel)
-  def topClicked(self, event):
-    #print(event)
-    modDetail = ModDetailsWindow(self.topmod)
-    modDetail.setGeometry(100, 200, 100, 100)
-    modDetail.setModal(True)
-    #modDetail.show()
-    mw = qtmodern.windows.ModernWindow(modDetail)
-    mw.show()   
-   
   
   @pyqtSlot(QLabel)
-  def secondClicked(self, event):
-  #print(event)
-    modDetail = ModDetailsWindow(self.secondtopmod)
+  def modClicked(self, mod):
+    modDetail = ModDetailsWindow(mod)
     modDetail.setGeometry(100, 200, 100, 100)
     modDetail.setModal(True)
-    #modDetail.show()
     mw = qtmodern.windows.ModernWindow(modDetail)
     mw.show() 
+
+  @pyqtSlot(QLabel)
+  def topClicked(self, event):
+    self.modClicked(self.topmod)
+     
+  @pyqtSlot(QLabel)
+  def secondClicked(self, event):
+    self.modClicked(self.secondtopmod)
   
   @pyqtSlot(QLabel)
   def thirdClicked(self, event):
-  #print(event)
-    modDetail = ModDetailsWindow(self.thirdtopmod)
-    modDetail.setGeometry(100, 200, 100, 100)
-    modDetail.setModal(True)
-    #modDetail.show()
-    mw = qtmodern.windows.ModernWindow(modDetail)
-    mw.show()
+    self.modClicked(self.thirdtopmod)
   
   @pyqtSlot(QLabel)
   def fourthClicked(self, event):
-  #print(event)
-    modDetail = ModDetailsWindow(self.fourthtopmod)
-    modDetail.setGeometry(100, 200, 100, 100)
-    modDetail.setModal(True)
-    #modDetail.show()
-    mw = qtmodern.windows.ModernWindow(modDetail)
-    mw.show()
+    self.modClicked(self.fourthtopmod)
     
   def __init__(self, parent,*args, **kwargs):
     super(MainWindow, self).__init__(parent,*args, **kwargs)
