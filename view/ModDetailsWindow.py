@@ -16,7 +16,7 @@ from view.LoginDialog import LoginDialog
 
 class ModDetailsWindow(QDialog):
     def __init__(self, parent):
-      super(ModDetailsWindow, self).__init__(parent)
+      super().__init__()
 
     def isModInstalled(self,modFile):
         mod_directory = ModsController.getModDirectory()

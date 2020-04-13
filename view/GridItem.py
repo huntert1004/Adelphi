@@ -10,7 +10,7 @@ class GridItem(QWidget):
     mod = None     
     
     def __init__(self, parent):
-      super(GridItem, self).__init__(parent)
+      super().__init__()
       self.parent = parent
       self.mod = Mod()
       self.setFixedSize(300, 250)
@@ -38,10 +38,6 @@ class GridItem(QWidget):
      
     @pyqtSlot(QLabel)
     def clicked(self,event):
-      #print(event)
-      self.modDetail = ModDetailsWindow(self.mod)
-      self.modDetail.setGeometry(100, 200, 100, 100)
-      self.modDetail.setModal(True)
-      #modDetail.show()
-      mw = qtmodern.windows.ModernWindow(self.modDetail)
-      mw.show()
+      modDetail = ModDetailsWindow(self.mod)
+      self.parent.tabs.addTab(modDetail,self.mod.title)    
+      self.parent.tabs.setCurrentIndex(self.parent.tabs.count()-1)

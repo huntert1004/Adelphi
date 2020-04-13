@@ -37,7 +37,8 @@ class MainWindow(QWidget):
       # Add tabs
       self.searchTabWidget.setLayout(self.searchTabVBoxLayout)
       self.tabs.addTab(self.searchTabScroll,"Search")
-      self.tabs.setCurrentIndex(1)
+      self.tabs.setCurrentIndex(self.tabs.count()-1)
+      self.tabs.tabBar().setTabButton(self.tabs.count()-1, QTabBar.RightSide,None)
       #Scroll Area Properties
       self.searchTabVBoxLayout.setAlignment(Qt.AlignTop)
       self.searchTabScroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
@@ -45,10 +46,7 @@ class MainWindow(QWidget):
       self.searchTabScroll.setWidgetResizable(True)
       self.searchTabScroll.setWidget(self.searchTabWidget)
     
-
-    self.clearSearchResults()
-    
-
+    self.clearSearchResults()    
   
   def clearSearchResults(self):
     while self.searchTabVBoxLayout.count():
@@ -80,8 +78,7 @@ class MainWindow(QWidget):
       
       @pyqtSlot(QLabel)
       def searchClick(event):
-        self.modClicked(mod)   
-      
+        self.modClicked(mod)
       
       imageLabel = QLabel()
       imageLabel.setPixmap(mod.image.scaled(100, 67, Qt.KeepAspectRatio))
@@ -90,9 +87,7 @@ class MainWindow(QWidget):
 
       textLabel = QLabel(item['title'])
       resultLayout.addWidget(textLabel)
-
       
-
       resultWidget.setLayout(resultLayout)
       self.searchTabVBoxLayout.addWidget(resultWidget)
 
@@ -101,7 +96,7 @@ class MainWindow(QWidget):
             
     for position,item in zip(positions,mods):
             
-      imageLabel = GridItem(self.parent)      
+      imageLabel = GridItem(self)      
       imageLabel.mod.title = item['title']
       imageLabel.mod.description = item['body']
       imageLabel.mod.compat = item['field_minecraft_compatibility']
@@ -111,13 +106,18 @@ class MainWindow(QWidget):
       
       self.grid.addWidget(imageLabel, *position,)
   
+  def closeTab (self, currentIndex):
+    currentQWidget = self.tabs.widget(currentIndex)
+    currentQWidget.deleteLater()
+    self.tabs.removeTab(currentIndex)
+
+
   @pyqtSlot(QLabel)
   def modClicked(self, mod):
     modDetail = ModDetailsWindow(mod)
-    modDetail.setGeometry(100, 200, 100, 100)
-    modDetail.setModal(True)
-    mw = qtmodern.windows.ModernWindow(modDetail)
-    mw.show() 
+    self.tabs.addTab(modDetail,mod.title)    
+    self.tabs.setCurrentIndex(self.tabs.count()-1)
+
 
   @pyqtSlot(QLabel)
   def topClicked(self, event):
@@ -136,7 +136,15 @@ class MainWindow(QWidget):
     self.modClicked(self.fourthtopmod)
     
   def __init__(self, parent,*args, **kwargs):
-    super(MainWindow, self).__init__(parent,*args, **kwargs)
+    super().__init__()
+
+    self.title = 'Adellphi'
+    self.left = 0
+    self.top = 0
+    self.width = 1280
+    self.height = 900
+    self.setWindowTitle(self.title)
+    self.setGeometry(self.left, self.top, self.width, self.height)
     
      #get data for entire view
     mods = ModsController().getModsData()
@@ -157,6 +165,10 @@ class MainWindow(QWidget):
     
     # Initialize tab screen
     self.tabs = QTabWidget()
+    self.tabs.setTabsClosable(True)
+    self.tabs.tabCloseRequested.connect(self.closeTab)
+    
+
     self.tab1scroll = QScrollArea()             # Scroll Area which contains the widgets, set as the centralWidget
     self.tab1widget = QWidget()                 # Widget that contains the collection of Vertical Box
     self.tab1vbox = QVBoxLayout()               # The Vertical Box that contains the Horizontal Boxes of  labels and buttons
@@ -270,6 +282,9 @@ class MainWindow(QWidget):
     self.tab1scroll.setWidget(self.tab1widget)
     # Add tabs
     self.tabs.addTab(self.tab1scroll,"Mods")
+    #make the first tab not closeable
+    self.tabs.tabBar().setTabButton(0, QTabBar.RightSide,None)
+
     #Scroll Area Properties
     def scrollevent(self,event):
       if event.key() == QtCore.Qt.Key_Down:
@@ -288,7 +303,7 @@ class MainWindow(QWidget):
     #Finalize screen
     self.layout.addWidget(self.tabs)
     self.setLayout(self.layout)
-
+      
     
 
   

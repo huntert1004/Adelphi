@@ -15,16 +15,12 @@ class App(QMainWindow):
         self.title = 'Adellphi'
         self.left = 0
         self.top = 0
-        self.width = 1200
+        self.width = 1280
         self.height = 900
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
         self.table_widget = MainWindow(self)
-        self.setCentralWidget(self.table_widget)
-        #self.show()
-        
-        mw = qtmodern.windows.ModernWindow(self)
-        mw.show()
+        self.table_widget.show()
 
 
 if __name__ == '__main__':
