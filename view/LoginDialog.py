@@ -28,7 +28,7 @@ class LoginDialog(QDialog):
         self.buttons.rejected.connect(self.reject)
 
         self.setModal(True)
-        self.setGeometry(100, 200, 100, 100)
+        self.setGeometry(100, 200, 500, 500)
         self.setWindowTitle('Login to Minecraft')
 
     def loginpassword(self):

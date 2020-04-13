@@ -53,16 +53,7 @@ class MainWindow(QWidget):
       
       self.grid.addWidget(imageLabel, *position,)
       
-  @pyqtSlot(QLabel)
-  def topClicked(self, event):
-    #print(event)
-    modDetail = ModDetailsWindow(self.topmod)
-    modDetail.setGeometry(100, 200, 100, 100)
-    modDetail.setModal(True)
-    #modDetail.show()
-    mw = qtmodern.windows.ModernWindow(modDetail)
-    mw.show()   
-   
+ 
   @pyqtSlot(QLabel)
   def secondClicked(self, event):
   #print(event)
@@ -91,8 +82,8 @@ class MainWindow(QWidget):
     mw = qtmodern.windows.ModernWindow(modDetail)
     mw.show()
     
-  def __init__(self, parent):
-    super(MainWindow, self).__init__(parent)
+  def __init__(self, parent,*args, **kwargs):
+    super(MainWindow, self).__init__(parent,*args, **kwargs)
     
      #get data for entire view
     mods = ModsController().getModsData()
@@ -145,7 +136,7 @@ class MainWindow(QWidget):
     #2nd feature mod
     self.secondtopmodlabel = QLabel("", self)
     self.secondtopmodlabel.setGeometry(0, 0, 400, 300)
-    item = mods[1]
+    item = mods[0]
     secondimageUrl = "https://minifymods.com" + item['field_screenshots']
     image = QPixmap()
     image.loadFromData(urllib.request.urlopen(secondimageUrl).read())
@@ -184,7 +175,7 @@ class MainWindow(QWidget):
     #4th feature mod
     self.fourthtopmodlabel = QLabel("", self)
     self.fourthtopmodlabel.setGeometry(0, 0, 400, 300)
-    item = mods[3]
+    item = mods[4]
     fourthimageUrl = "https://minifymods.com" + item['field_screenshots']
     fourthimage = QPixmap()
     fourthimage.loadFromData(urllib.request.urlopen(fourthimageUrl).read())
@@ -220,14 +211,25 @@ class MainWindow(QWidget):
     ##### FINALIZE TAB1 #####
     #now set tab1widget layout
     self.tab1widget.setLayout(self.tab1vbox)
-    
-    # Add tabs
-    self.tabs.addTab(self.tab1scroll,"Mods")
-    #Scroll Area Properties
     self.tab1scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
     self.tab1scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
     self.tab1scroll.setWidgetResizable(True)
     self.tab1scroll.setWidget(self.tab1widget)
+    # Add tabs
+    self.tabs.addTab(self.tab1scroll,"Mods")
+    #Scroll Area Properties
+    def scrollevent(self,event):
+      if event.key() == QtCore.Qt.Key_Down:
+              if self.tab1scroll.currentRow() == self.count()-1:
+                  self.tab1scroll.setCurrentRow(0)
+                  return
+              elif event.key() == QtCore.Qt.Key_Up:
+                  if self.tab1scroll.currentRow() == 0:
+                      self.tab1scroll.setCurrentRow(self.count()-1)
+                      return
+
+        # Otherwise, parent behavior
+                      super().scrollevent(event)
     
     
     #Finalize screen
