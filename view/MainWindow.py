@@ -90,12 +90,35 @@ class MainWindow(QWidget):
       
       resultWidget.setLayout(resultLayout)
       self.searchTabVBoxLayout.addWidget(resultWidget)
+  
+  @pyqtSlot()
+  def loadMore(self):
+    if self.page > 5:
+      return
+    self.page += 1
+    mods = ModsController.getModsData(self.page)
+    self.displayMods(mods)
 
   def displayMods(self,mods):
-    positions = [(i,j) for i in range(5) for j in range(4)]
+    if self.page > 5:
+      return
+    rowRange = range(5)
+    if self.page == 1:
+      rowRange = range(6,10)
+    if self.page == 2:
+      rowRange = range(11,15)
+    if self.page == 3:
+      rowRange = range(16,20)
+    if self.page == 4:
+      rowRange = range(21,25)
+    if self.page == 5:
+      rowRange = range(26,30)
+      self.loadMoreButton.setEnabled(False)
+      self.loadMoreButton.setText("Try Searching!")
+    
+    positions = [(i,j) for i in rowRange for j in range(4)]
             
     for position,item in zip(positions,mods):
-            
       imageLabel = GridItem(self)      
       imageLabel.mod.title = item['title']
       imageLabel.mod.description = item['body']
@@ -104,7 +127,7 @@ class MainWindow(QWidget):
       imageLabel.mod.imageUrl = "https://minifymods.com" + item['field_screenshots']
       imageLabel.create(self)
       
-      self.grid.addWidget(imageLabel, *position,)
+      self.grid.addWidget(imageLabel, *position)
   
   def closeTab (self, currentIndex):
     currentQWidget = self.tabs.widget(currentIndex)
@@ -145,6 +168,8 @@ class MainWindow(QWidget):
     self.height = 900
     self.setWindowTitle(self.title)
     self.setGeometry(self.left, self.top, self.width, self.height)
+
+    self.page = 0
     
      #get data for entire view
     mods = ModsController().getModsData()
@@ -157,11 +182,15 @@ class MainWindow(QWidget):
       
     #self.browser.load("https://minifymods.com/ad.html")
     #self.layout.addWidget(self.browser)
-    
+    self.topBarWidget = QWidget(self)
+    self.topBarLayout = QHBoxLayout(self)
+
     self.searchBar = QLineEdit()
     self.searchBar.setPlaceholderText("Search Mods") 
     self.searchBar.editingFinished.connect(self.searchMods)
-    self.layout.addWidget(self.searchBar)
+    self.topBarLayout.addWidget(self.searchBar)
+    self.topBarWidget.setLayout(self.topBarLayout)
+    self.layout.addWidget(self.topBarWidget)
     
     # Initialize tab screen
     self.tabs = QTabWidget()
@@ -272,6 +301,10 @@ class MainWindow(QWidget):
     self.gridWidget.setLayout(self.grid)
     self.tab1vbox.addWidget(self.gridWidget)
     
+    #add load more button
+    self.loadMoreButton = QPushButton("Load More")
+    self.loadMoreButton.clicked.connect(self.loadMore)
+    self.tab1vbox.addWidget(self.loadMoreButton)
     
     ##### FINALIZE TAB1 #####
     #now set tab1widget layout

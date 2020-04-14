@@ -13,8 +13,8 @@ class ModsController:
     return ModsController.__instance
 
   @staticmethod
-  def getModsData():
-    json_url = "https://minifymods.com/api/mods?_format=json"
+  def getModsData(page=0):
+    json_url = "https://minifymods.com/api/mods?_format=json&page=" + str(page)
     data = urllib.request.urlopen(json_url).read().decode()
     return json.loads(data)
 
