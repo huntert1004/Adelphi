@@ -17,14 +17,13 @@ from controller.ModsController import ModsController
 from view.Slides import Slides
 from model.Mod import Mod
 
-
 class MainWindow(QWidget):
 
   def searchMods(self):
     term = self.searchBar.text()
     
     if term:
-      mods = ModsController.getSearchData(term)
+      mods = ModsController.getSearchData(term, self.filterSelect.currentText())
       self.createSearchTab()
       self.displaySearch(mods)
 
@@ -47,6 +46,12 @@ class MainWindow(QWidget):
       self.searchTabScroll.setWidget(self.searchTabWidget)
     
     self.clearSearchResults()    
+  
+  def clearGrid(self):
+    while self.grid.count():
+      child = self.grid.takeAt(0)
+      if child.widget():
+        child.widget().deleteLater()
   
   def clearSearchResults(self):
     while self.searchTabVBoxLayout.count():
@@ -96,7 +101,7 @@ class MainWindow(QWidget):
     if self.page > 5:
       return
     self.page += 1
-    mods = ModsController.getModsData(self.page)
+    mods = ModsController.getModsData(self.page,self.filterSelect.currentText())
     self.displayMods(mods)
 
   def displayMods(self,mods):
@@ -157,6 +162,12 @@ class MainWindow(QWidget):
   @pyqtSlot(QLabel)
   def fourthClicked(self, event):
     self.modClicked(self.fourthtopmod)
+
+  @pyqtSlot()
+  def filterChanged(self, *args):    
+    mods = ModsController.getModsData(0,self.filterSelect.currentText())
+    self.clearGrid()
+    self.displayMods(mods)
     
   def __init__(self, parent,*args, **kwargs):
     super().__init__()
@@ -189,6 +200,13 @@ class MainWindow(QWidget):
     self.searchBar.setPlaceholderText("Search Mods") 
     self.searchBar.editingFinished.connect(self.searchMods)
     self.topBarLayout.addWidget(self.searchBar)
+
+    self.filterSelect = QComboBox()
+    self.filterSelect.addItem("Filter by Minecraft Version")
+    self.filterSelect.addItems(["1.12.2","1.15.2","1.7.10","1.8.9"])
+    self.filterSelect.currentIndexChanged.connect(self.filterChanged)
+    self.topBarLayout.addWidget(self.filterSelect)
+
     self.topBarWidget.setLayout(self.topBarLayout)
     self.layout.addWidget(self.topBarWidget)
     

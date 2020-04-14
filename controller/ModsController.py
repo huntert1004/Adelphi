@@ -12,15 +12,23 @@ class ModsController:
         ModsController()
     return ModsController.__instance
 
+
   @staticmethod
-  def getModsData(page=0):
-    json_url = "https://minifymods.com/api/mods?_format=json&page=" + str(page)
+  def getCompatFilter(filter=""):
+    compatFilter = "" if filter=="" else "&compat="+filter
+    if (filter == "Filter by Minecraft Version"):
+      compatFilter = ""
+    return compatFilter
+
+  @staticmethod
+  def getModsData(page=0,filter=""):
+    json_url = "https://minifymods.com/api/mods?_format=json&page=" + str(page) + ModsController.getCompatFilter(filter)
     data = urllib.request.urlopen(json_url).read().decode()
     return json.loads(data)
 
   @staticmethod
-  def getSearchData(term):
-    json_url = "https://minifymods.com/api/mods?_format=json&search=" + term
+  def getSearchData(term,filter=""):
+    json_url = "https://minifymods.com/api/mods?_format=json&search=" + term + ModsController.getCompatFilter(filter)
     data = urllib.request.urlopen(json_url).read().decode()
     return json.loads(data)
     
