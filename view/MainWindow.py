@@ -48,6 +48,9 @@ class MainWindow(QWidget):
     self.clearSearchResults()    
   
   def clearGrid(self):
+    self.page = 0
+    self.loadMoreButton.setEnabled(True)
+    self.loadMoreButton.setText("Load More")
     while self.grid.count():
       child = self.grid.takeAt(0)
       if child.widget():
