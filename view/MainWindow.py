@@ -9,6 +9,7 @@ import urllib.request
 import qtmodern.styles
 import qtmodern.windows
 from pathlib import Path
+from view.ModImageWidget import ModImageWidget
 from view.ModDetailsWindow import ModDetailsWindow
 from view.GridItem import GridItem
 from view.ListItem import ListItem
@@ -63,7 +64,7 @@ class MainWindow(QWidget):
         child.widget().deleteLater()
 
     self.searchTitle = QLabel("Search Results")
-    self.searchTitle.setStyleSheet("font-weight: bold; font-size: 200%")
+    self.searchTitle.setStyleSheet("font-weight: bold; font-size: 3em")
     self.searchTabVBoxLayout.addWidget(self.searchTitle)
 
   def displaySearch(self,mods):
@@ -71,6 +72,11 @@ class MainWindow(QWidget):
             
     #for position,item in zip(positions,mods):
     for item in mods:
+
+      @pyqtSlot(QLabel)
+      def searchClick(event):
+        self.modClicked(mod)
+  
       resultWidget = QWidget()
       resultLayout = QHBoxLayout()
       resultLayout.setAlignment(Qt.AlignLeft)
@@ -81,24 +87,27 @@ class MainWindow(QWidget):
       mod.compat = item['field_minecraft_compatibility']
       mod.modfile = item['field_mod_file']
       mod.imageUrl = "https://minifymods.com" + item['field_screenshots']
-      mod.image = QPixmap()
-      mod.image.loadFromData(urllib.request.urlopen(mod.imageUrl).read())
       
-      @pyqtSlot(QLabel)
-      def searchClick(event):
-        self.modClicked(mod)
-      
-      imageLabel = QLabel()
-      imageLabel.setPixmap(mod.image.scaled(100, 67, Qt.KeepAspectRatio))
+      imageLabel = ModImageWidget(mod)
       imageLabel.mousePressEvent = searchClick
       resultLayout.addWidget(imageLabel)
 
-      textLabel = QLabel(item['title'])
-      resultLayout.addWidget(textLabel)
+      textWidget = QWidget()
+      textWidgetLayout = QVBoxLayout()
+      
+      titleLabel = QLabel(mod.title)
+      titleLabel.setStyleSheet("font-weight: bold; font-size: 2em")
+      textWidgetLayout.addWidget(titleLabel)
+      textWidgetLayout.addWidget(QLabel(mod.description))
+
+      textWidget.setLayout(textWidgetLayout)
+      textWidget.mousePressEvent = searchClick
+      resultLayout.addWidget(textWidget)
       
       resultWidget.setLayout(resultLayout)
       self.searchTabVBoxLayout.addWidget(resultWidget)
-  
+
+      
   @pyqtSlot()
   def loadMore(self):
     if self.page > 5:

@@ -1,5 +1,5 @@
 import urllib.request
-from PyQt5.QtCore import *
+from PyQt5.QtCore import QThread, pyqtSignal
 
 class DownloadThread(QThread):
     data_downloaded = pyqtSignal()

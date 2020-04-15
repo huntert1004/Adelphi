@@ -56,7 +56,7 @@ class ModDetailsWindow(QDialog):
         self.descriptionLabel = QLabel(mod.description)
         self.descriptionLabel.setWordWrap(True)
         self.layout.addWidget(self.descriptionLabel)
-        self.layout.addWidget(QLabel("Minecraft Compatability: " + mod.compat))
+        self.layout.addWidget(QLabel("Minecraft Compatibility: " + mod.compat))
         
 
         if (self.isForgeInstalled(mod.compat)):

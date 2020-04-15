@@ -6,7 +6,7 @@ from util.DownloadThread import DownloadThread
 class ModImageWidget(QWidget):
   def __init__(self, mod, parent=None):
       super().__init__()
-      self.setMinimumSize(50, 50)
+      self.setMinimumSize(100, 67)
       self.pixmap = None
       self.mod = mod
       self.download_thread = DownloadThread(mod.imageUrl)

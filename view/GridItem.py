@@ -7,9 +7,6 @@ from view.ModImageWidget import ModImageWidget
 
 from model.Mod import Mod
 
-
-
-
 class GridItem(QWidget):
     mod = None     
     
@@ -35,4 +32,3 @@ class GridItem(QWidget):
       modDetail = ModDetailsWindow(self.mod)
       self.parent.tabs.addTab(modDetail,self.mod.title)    
       self.parent.tabs.setCurrentIndex(self.parent.tabs.count()-1)
-
