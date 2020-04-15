@@ -4,7 +4,8 @@ from PyQt5.QtCore import *
 from view.ModDetailsWindow import ModDetailsWindow
 from model.Mod import Mod
 import qtmodern
-import urllib.request
+
+from util.DownloadThread import DownloadThread
 
 class GridItem(QWidget):
     mod = None     
@@ -60,18 +61,3 @@ class ImageLabel(QWidget):
       self.pixmap = pixmap
       self.setMinimumSize(pixmap.width(), pixmap.height())
       self.update()
-
-class DownloadThread(QThread):
-    data_downloaded = pyqtSignal()
-
-    def __init__(self, url):
-        super().__init__()
-        self.url = url
-        self._data = None
-
-    def run(self):
-        self._data = urllib.request.urlopen(self.url).read()
-        self.data_downloaded.emit()
-
-    def get_data(self):
-        return self._data
