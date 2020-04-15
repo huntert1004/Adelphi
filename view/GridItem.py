@@ -15,29 +15,63 @@ class GridItem(QWidget):
       self.mod = Mod()
       self.setFixedSize(300, 250)
     
-    def create(self, parent):
-      
+    def create(self, parent):      
       self.layout = QVBoxLayout()
-      
-      self.imageLabel = QLabel()
-      self.mod.image = QPixmap()
-      self.mod.image.loadFromData(urllib.request.urlopen(self.mod.imageUrl).read())
-      self.imageLabel.image = self.mod.image           
-      self.imageLabel.setPixmap(self.mod.image.scaled(300, 200, Qt.KeepAspectRatio))
-      self.imageLabel.setFixedSize(300, 200)
-      self.imageLabel.mousePressEvent = self.clicked
-      
+      self.imageLabel = ImageLabel(self.mod)
+      self.imageLabel.mousePressEvent = self.clicked      
       self.layout.addWidget(self.imageLabel)
-      
       self.textLabel = QLabel(self.mod.title)
       self.textLabel.mousePressEvent = self.clicked
       self.textLabel.setFixedSize(300, 20)
       self.layout.addWidget(self.textLabel)
-      
       self.setLayout(self.layout)
-     
+
     @pyqtSlot(QLabel)
     def clicked(self,event):
       modDetail = ModDetailsWindow(self.mod)
       self.parent.tabs.addTab(modDetail,self.mod.title)    
       self.parent.tabs.setCurrentIndex(self.parent.tabs.count()-1)
+
+class ImageLabel(QWidget):
+  def __init__(self, mod, parent=None):
+      super().__init__()
+      self.setMinimumSize(50, 50)
+      self.pixmap = None
+      self.mod = mod
+      self.download_thread = DownloadThread(mod.imageUrl)
+      self.download_thread.start()
+      self.download_thread.data_downloaded.connect(self.ondownloadFinished)
+
+  def paintEvent(self, paintEvent):
+      painter = QPainter(self)
+      if (self.pixmap):
+          painter.drawPixmap(0, 0, self.pixmap)
+
+  def ondownloadFinished(self):
+      self.paintImage()
+
+  def paintImage(self):
+      pixmap = QPixmap()
+      pixmap.loadFromData(self.download_thread.get_data())
+      self.mod.image = pixmap
+      self.setPixmap(pixmap)
+
+  def setPixmap(self, pixmap):
+      self.pixmap = pixmap
+      self.setMinimumSize(pixmap.width(), pixmap.height())
+      self.update()
+
+class DownloadThread(QThread):
+    data_downloaded = pyqtSignal()
+
+    def __init__(self, url):
+        super().__init__()
+        self.url = url
+        self._data = None
+
+    def run(self):
+        self._data = urllib.request.urlopen(self.url).read()
+        self.data_downloaded.emit()
+
+    def get_data(self):
+        return self._data
