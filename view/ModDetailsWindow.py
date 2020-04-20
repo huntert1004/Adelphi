@@ -81,13 +81,13 @@ class ModDetailsWindow(QDialog):
         forgeDownloadUrl = "";
  
         if (version == "1.15.2"):
-            forgeDownloadUrl = "https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.15.2-31.1.37/forge-1.15.2-31.1.37-installer.jar"
+            forgeDownloadUrl = "https://minifymods.com/sites/default/files/forge-1.15.2-31.1.37-installer.jar"
         elif (version == "1.12.2"):
-            forgeDownloadUrl = "https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.12.2-14.23.5.2768/forge-1.12.2-14.23.5.2768-installer.jar"
+            forgeDownloadUrl = "https://minifymods.com/sites/default/files/forge-1.12.2-14.23.5.2768-installer.jar"
         elif (version == "1.8.9"):
-            forgeDownloadUrl = "https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.8.9-11.15.1.1722/forge-1.8.9-11.15.1.1722-installer.jar"
+            forgeDownloadUrl = "https://minifymods.com/sites/default/files/forge-1.8.9-11.15.1.1722-installer.jar"
         elif (version == "1.7.10"):
-            forgeDownloadUrl = "https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.7.10-10.13.4.1558-1.7.10/forge-1.7.10-10.13.4.1558-1.7.10-installer.jar"
+            forgeDownloadUrl = "https://minifymods.com/sites/default/files/forge-1.7.10-10.13.4.1558-1.7.10-installer.jar"
  
         filename = forgeDownloadUrl.split("/")[-1]
         install_directory = ModsController.getDotMinecraftDirectory()
