@@ -6,7 +6,7 @@ class DownloadThread(QThread):
 
     def __init__(self, url):
         super().__init__()
-        self.url = url
+        self.url = url.split(", ")[0]
         self._data = None
 
     def run(self):
