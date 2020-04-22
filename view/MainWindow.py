@@ -12,6 +12,7 @@ from pathlib import Path
 from view.ModImageWidget import ModImageWidget
 from view.ModDetailsWindow import ModDetailsWindow
 from view.GridItem import GridItem
+from view.SearchItem import SearchItem
 from view.ListItem import ListItem
 from controller.ModsController import ModsController
 #from view.Browser import Browser
@@ -72,40 +73,14 @@ class MainWindow(QWidget):
             
     #for position,item in zip(positions,mods):
     for item in mods:
-
-      @pyqtSlot(QLabel)
-      def searchClick(event):
-        self.modClicked(mod)
-  
-      resultWidget = QWidget()
-      resultLayout = QHBoxLayout()
-      resultLayout.setAlignment(Qt.AlignLeft)
-      
-      mod = Mod() 
-      mod.title = item['title']
-      mod.description = item['body']
-      mod.compat = item['field_minecraft_compatibility']
-      mod.modfile = item['field_mod_file']
-      mod.imageUrl = "https://minifymods.com" + item['field_screenshots']
-      
-      imageLabel = ModImageWidget(mod)
-      imageLabel.mousePressEvent = searchClick
-      resultLayout.addWidget(imageLabel)
-
-      textWidget = QWidget()
-      textWidgetLayout = QVBoxLayout()
-      
-      titleLabel = QLabel(mod.title)
-      titleLabel.setStyleSheet("font-weight: bold; font-size: 2em")
-      textWidgetLayout.addWidget(titleLabel)
-      textWidgetLayout.addWidget(QLabel(mod.description))
-
-      textWidget.setLayout(textWidgetLayout)
-      textWidget.mousePressEvent = searchClick
-      resultLayout.addWidget(textWidget)
-      
-      resultWidget.setLayout(resultLayout)
-      self.searchTabVBoxLayout.addWidget(resultWidget)
+      searchItem = SearchItem(self)
+      searchItem.mod.title = item['title']
+      searchItem.mod.description = item['body']
+      searchItem.mod.compat = item['field_minecraft_compatibility']
+      searchItem.mod.modfile = item['field_mod_file']
+      searchItem.mod.imageUrl = "https://minifymods.com" + item['field_screenshots']
+      searchItem.create(self)      
+      self.searchTabVBoxLayout.addWidget(searchItem)
 
       
   @pyqtSlot()
@@ -136,7 +111,7 @@ class MainWindow(QWidget):
     positions = [(i,j) for i in rowRange for j in range(4)]
             
     for position,item in zip(positions,mods):
-      imageLabel = GridItem(self)      
+      imageLabel = GridItem(self)
       imageLabel.mod.title = item['title']
       imageLabel.mod.description = item['body']
       imageLabel.mod.compat = item['field_minecraft_compatibility']

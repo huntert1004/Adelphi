@@ -92,12 +92,12 @@ class ModDetailsWindow(QDialog):
         filename = forgeDownloadUrl.split("/")[-1]
         install_directory = ModsController.getDotMinecraftDirectory()
 
-        file = open(install_directory +filename,"wb")
+        file = open(filename,"wb")
         #load data into file object
         with urllib.request.urlopen(forgeDownloadUrl) as response:
             with file as tmp_file:
                 shutil.copyfileobj(response, tmp_file)
-                subprocess.call(["java","-jar",install_directory + "/" + filename])
+                subprocess.call(["java","-jar",install_directory + filename])
         self.addInstallButton(modfile)
         self.layout.removeWidget(self.forgeInstallButton)
         QMessageBox.information(self, "Adellphi", "Forge v" + version + " Install Successful")
