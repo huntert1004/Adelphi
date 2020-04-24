@@ -1,4 +1,6 @@
 # -*- mode: python ; coding: utf-8 -*-
+
+block_cipher = None
 import importlib
 import pathlib
 package_imports = [['qtmodern', ['resources/frameless.qss', 'resources/style.qss']]]
@@ -9,12 +11,11 @@ for package, files in package_imports:
     added_file.extend((proot / f, package) for f in files)
 block_cipher = None
 
-
 a = Analysis(['adellphi.py'],
              pathex=['C:\\Users\\hunte\\OneDrive\\Desktop\\Adelphi'],
              binaries=[],
              datas=added_file,
-             hiddenimports=[],
+             hiddenimports=['PyQt5'],
              hookspath=[],
              runtime_hooks=[],
              excludes=[],
@@ -26,19 +27,15 @@ pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
 exe = EXE(pyz,
           a.scripts,
+          a.binaries,
+          a.zipfiles,
+          a.datas,
           [],
-          exclude_binaries=True,
           name='adellphi',
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
           upx=True,
+          upx_exclude=[],
+          runtime_tmpdir=None,
           console=True )
-coll = COLLECT(exe,
-               a.binaries,
-               a.zipfiles,
-               a.datas,
-               strip=False,
-               upx=True,
-               upx_exclude=[],
-               name='adellphi')
