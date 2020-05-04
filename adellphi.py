@@ -10,6 +10,7 @@ import qtmodern.styles
 import qtmodern.windows
 from view.MainWindow import MainWindow
 import pathlib
+import sys
 
 root = pathlib.Path()
 if getattr(sys, 'frozen', False):

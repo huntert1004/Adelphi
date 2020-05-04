@@ -1,6 +1,7 @@
 import json
 import urllib.request
 import os
+import platform
 from pathlib import Path
 
 class ModsController:
@@ -39,35 +40,45 @@ class ModsController:
     else:
         ModsController.__instance = self
 
+
   @staticmethod
   def getVersionsDirectory():
-        if os.name == 'nt':
+        if platform.system() == 'Windows':
             appData = os.getenv('APPDATA')
-            versions_directory = appData + "\\.minecraft\\versions"
-        else:
+            directory = appData + "\\.minecraft\\versions"
+        elif platform.system() == "Darwin":
             appData = str(Path.home())
-            versions_directory = appData + "/.minecraft/versions"
-        return versions_directory
+            directory = appData + "/Library/Application Support/minecraft/versions"
+        elif platform.system() == "Linux":
+            appData = str(Path.home())
+            directory = appData + "/.minecraft/versions"
+        return directory
 
   @staticmethod
   def getDotMinecraftDirectory():
-        if os.name == 'nt':
-            appData = os.getenv('APPDATA')
-            versions_directory = appData + "\\.minecraft\\"
-        else:
-            appData = str(Path.home())
-            versions_directory = appData + "/.minecraft/"
-        return versions_directory
+    if platform.system() == 'Windows':
+        appData = os.getenv('APPDATA')
+        directory = appData + "\\.minecraft\\"
+    elif platform.system() == "Darwin":
+        appData = str(Path.home())
+        directory = appData + "/Library/Application Support/minecraft/"
+    elif platform.system() == "Linux":
+        appData = str(Path.home())
+        directory = appData + "/.minecraft/"
+    return directory
 
   @staticmethod
   def getModDirectory():
-    if os.name == 'nt':
-        appData = os.getenv('APPDATA')
-        mod_directory = appData + "\\.minecraft\\mods\\"
-    else:
-        appData = str(Path.home())
-        mod_directory = appData + "/.minecraft/mods/"
-    return mod_directory
+    if platform.system() == 'Windows':
+      appData = os.getenv('APPDATA')
+      directory = appData + "\\.minecraft\\mods\\"
+    elif platform.system() == "Darwin":
+      appData = str(Path.home())
+      directory = appData + "/Library/Application Support/minecraft/mods"
+    elif platform.system() == "Linux":
+      appData = str(Path.home())
+      directory = appData + "/.minecraft/mods"
+    return directory
   
 
 
