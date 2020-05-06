@@ -27,18 +27,21 @@ class ModDetailsWindow(QDialog):
                 return True
             
     def getForgeVersion(self,modCompat):
-        versions_directory = ModsController.getVersionsDirectory()
-
-        modVersions = [x.strip() for x in modCompat.split(',')]
-        for child in os.listdir(versions_directory):
-            for modVersion in modVersions:
-                if (child.startswith(modVersion + "-forge")):
-                    return child
+        try:
+            versions_directory = ModsController.getVersionsDirectory()
+            if (versions_directory):
+                modVersions = [x.strip() for x in modCompat.split(',')]
+                for child in os.listdir(versions_directory):
+                    for modVersion in modVersions:
+                        if (child.lower().startswith(modVersion + "-forge")):
+                            return child
+        except:
+            pass
 
     def isForgeInstalled(self, modCompat):
         forge_dir = self.getForgeVersion(modCompat)
         versions_directory = ModsController.getVersionsDirectory()
-        
+
         if (versions_directory and forge_dir):
             test_path = os.path.join(versions_directory, forge_dir)
             if os.path.isdir(test_path):
@@ -97,7 +100,7 @@ class ModDetailsWindow(QDialog):
         with urllib.request.urlopen(forgeDownloadUrl) as response:
             with file as tmp_file:
                 shutil.copyfileobj(response, tmp_file)
-                subprocess.call(["java","-jar",install_directory + filename])
+                subprocess.call(["java","-jar", filename])
         self.addInstallButton(modfile)
         self.layout.removeWidget(self.forgeInstallButton)
         QMessageBox.information(self, "Adellphi", "Forge v" + version + " Install Successful")
