@@ -4,6 +4,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 import json
 import os
+import sys
 import shutil
 import urllib.request
 import qtmodern.styles
@@ -16,7 +17,6 @@ root = pathlib.Path()
 if getattr(sys, 'frozen', False):
     root = pathlib.Path(sys._MEIPASS)
     qtmodern.styles._STYLESHEET = root / 'qtmodern/style.qss'
-    qtmodern.windows._FL_STYLESHEET = root / 'qtmodern/frameless.qss'
 class App(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -34,7 +34,7 @@ class App(QMainWindow):
 if __name__ == '__main__':
     import sys, time
     app = QApplication(sys.argv)
-    splash_pix = QPixmap('images/Splashscreen.gif')
+    splash_pix = QPixmap('C:\\Users\\hunte\\OneDrive\\Desktop\\Adelphi\\splashscreen.gif')
     splash = QSplashScreen(splash_pix)
     splash.setMask(splash_pix.mask())
     splash.show()

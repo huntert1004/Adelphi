@@ -214,7 +214,7 @@ class MainWindow(QWidget):
     self.topmodLabel = QLabel("", self)
     self.topmodLabel.setGeometry(0, 0, 1200, 300)
     item = mods[0]
-    image = QPixmap("images/New Project.png")
+    image = QPixmap("C:\\Users\\hunte\\OneDrive\\Desktop\\Adelphi\\adellphi.png")
     self.topmodLabel.setPixmap(image.scaled(1200, 400, Qt.KeepAspectRatio))
     self.tab1vbox.addWidget(self.topmodLabel)
     self.topmod = Mod()

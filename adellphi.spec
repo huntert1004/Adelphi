@@ -11,6 +11,8 @@ for package, files in package_imports:
     added_file.extend((proot / f, package) for f in files)
 block_cipher = None
 
+added_file += [("C:\\Users\\hunte\\OneDrive\\Desktop\\Adelphi\\splashscreen.gif", '.' )]
+added_file += [("C:\\Users\\hunte\\OneDrive\\Desktop\\Adelphi\\adellphi.png", '.' )]
 a = Analysis(['adellphi.py'],
              pathex=['C:\\Users\\hunte\\OneDrive\\Desktop\\Adelphi'],
              binaries=[],
