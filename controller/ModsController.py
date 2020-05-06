@@ -74,10 +74,15 @@ class ModsController:
       directory = appData + "\\.minecraft\\mods\\"
     elif platform.system() == "Darwin":
       appData = str(Path.home())
-      directory = appData + "/Library/Application Support/minecraft/mods"
+      directory = appData + "/Library/Application Support/minecraft/mods/"
     elif platform.system() == "Linux":
       appData = str(Path.home())
-      directory = appData + "/.minecraft/mods"
+      directory = appData + "/.minecraft/mods/"
+      
+    if not os.path.isdir(directory):
+      #create the directory
+      Path(directory).mkdir(parents=True, exist_ok=True)
+    
     return directory
   
 
