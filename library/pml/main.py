@@ -3,7 +3,19 @@ import subprocess
 import os
 import sys
 import platform
+from PyQt5.QtWidgets import QMessageBox, QInputDialog,QWidget
 
+class LoginDialog(QWidget):
+    def __init__(self, parent=None):
+        super(LoginDialog, self).__init__(parent)
+        #self.setSize
+
+    def login(self):
+        login, ok = QInputDialog.getText(self, "Minecraft Login", "Username:")
+        if ok and login:
+            password, ok =  QInputDialog.getText(self, "Minecraft Login", "Password:")
+            if ok and password:
+                return login,password
 
 def runminecraft(forge_version):
     if platform.system() == 'Windows':
@@ -16,15 +28,23 @@ def runminecraft(forge_version):
       appData = str(Path.home())
       p = appData + "/.minecraft/"
     
+    
+    login,password = LoginDialog().login()
+
     # initialize
     #p = os.environ["appdata"] + "\\.minecraft"  # windows default game directory
     #p = os.getcwd() + "/game"
     #p = os.path.abspath("/home/myu/.minecraft")
+    if (not password):
+        QMessageBox.information(None, "Adellphi", "You must login")
+        return
+
+
     pml.initialize(p)
     print("Initialized in " + pml.getGamePath())
     from .pycraft import authentication
     auth = authentication.AuthenticationToken()
-    auth.authenticate("", "")
+    auth.authenticate(login, password)
 
     session = mlogin.session()  # set session object
     session.username = auth.profile.name
