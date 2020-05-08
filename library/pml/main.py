@@ -2,37 +2,49 @@ from pmlauncher import pml, mlogin, mlaunchoption
 import subprocess
 import os
 import sys
+import platform
 
 
-def runminecraft():
+def runminecraft(forge_version):
+    if platform.system() == 'Windows':
+      appData = os.getenv('APPDATA')
+      p = appData + "\\.minecraft\\"
+    elif platform.system() == "Darwin":
+      appData = str(Path.home())
+      p = appData + "/Library/Application Support/minecraft/"
+    elif platform.system() == "Linux":
+      appData = str(Path.home())
+      p = appData + "/.minecraft/"
+    
     # initialize
-    p = os.environ["appdata"] + "\\.minecraft"  # windows default game directory
+    #p = os.environ["appdata"] + "\\.minecraft"  # windows default game directory
     #p = os.getcwd() + "/game"
     #p = os.path.abspath("/home/myu/.minecraft")
     pml.initialize(p)
     print("Initialized in " + pml.getGamePath())
+    from .pycraft import authentication
+    auth = authentication.AuthenticationToken()
+    auth.authenticate("", "")
+
+    session = mlogin.session()  # set session object
+    session.username = auth.profile.name
+    session.uuid = auth.profile.id_
+    session.access_token = auth.access_token
 
 
-    # login
-    print("session : test user (tester123)")
-    session = mlogin.session()
-    session.username = "tester123"
-    session.uuid = "uuid"
-    session.access_token = "access_token"
-
-
+    inputVersion = forge_version
     # get profiles
     profiles = pml.updateProfiles()
     for item in profiles:
         print(item.name)
 
-    inputVersion = input("input version : ")
-
+    #inputVersion = input("input version : ")    
 
     # download event handler
     # filekind : library , minecraft, index, resource
     def downloadEvent(x):
-        print(x.filekind + " - " + x.filename + " - " + str(x.currentvalue) + "/" + str(x.maxvalue))
+        pass
+        #print(x.filekind + " - " + x.filename + " - " + str(x.currentvalue) + "/" + str(x.maxvalue))
 
 
     pml.downloadEventHandler = downloadEvent

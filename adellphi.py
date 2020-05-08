@@ -35,6 +35,7 @@ if __name__ == '__main__':
     import sys, time
     app = QApplication(sys.argv)
     splash_pix = QPixmap('C:\\Users\\hunte\\OneDrive\\Desktop\\Adelphi\\splashscreen.gif')
+    #exe null pix map fix C:\\Users\\hunte\\OneDrive\\Desktop\\Adelphi\\
     splash = QSplashScreen(splash_pix)
     splash.setMask(splash_pix.mask())
     splash.show()
