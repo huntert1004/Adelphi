@@ -54,9 +54,9 @@ def runminecraft(forge_version):
 
     inputVersion = forge_version
     # get profiles
-    profiles = pml.updateProfiles()
-    for item in profiles:
-        print(item.name)
+    #profiles = pml.updateProfiles()
+    #for item in profiles:
+        #print(item.name)
 
     #inputVersion = input("input version : ")    
 

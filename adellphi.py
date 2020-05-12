@@ -16,7 +16,8 @@ import sys
 root = pathlib.Path()
 if getattr(sys, 'frozen', False):
     root = pathlib.Path(sys._MEIPASS)
-    qtmodern.styles._STYLESHEET = root / 'qtmodern/style.qss'
+    qtmodern.styles._STYLESHEET = root / 'qtmodern/style.qss' 
+    #hidden imports in exe file
 class App(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -29,7 +30,7 @@ class App(QMainWindow):
         self.setGeometry(self.left, self.top, self.width, self.height)
         self.table_widget = MainWindow(self)
         self.table_widget.show()
-
+#init the gmain windo widget sets the size and title
 
 if __name__ == '__main__':
     import sys, time
@@ -44,6 +45,6 @@ if __name__ == '__main__':
     qtmodern.styles.light(app)
     ex = App()
     sys.exit(app.exec_())
-    
+    #runs adellphi
  
     
