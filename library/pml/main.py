@@ -3,7 +3,7 @@ import subprocess
 import os
 import sys
 import platform
-from PyQt5.QtWidgets import QMessageBox, QInputDialog,QWidget
+from PyQt5.QtWidgets import QMessageBox, QInputDialog,QWidget, QLineEdit
 
 class LoginDialog(QWidget):
     def __init__(self, parent=None):
@@ -13,7 +13,7 @@ class LoginDialog(QWidget):
     def login(self):
         login, ok = QInputDialog.getText(self, "Minecraft Login", "Username:")
         if ok and login:
-            password, ok =  QInputDialog.getText(self, "Minecraft Login", "Password:")
+            password, ok =  QInputDialog.getText(self, "Minecraft Login", "Password:", QLineEdit.Password)
             if ok and password:
                 return login,password
 
