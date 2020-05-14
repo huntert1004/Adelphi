@@ -5,7 +5,7 @@ import sys
 import platform
 from PyQt5.QtWidgets import QMessageBox, QInputDialog,QWidget, QLineEdit
 import keyring
-
+from pathlib import Path
 
 class LoginDialog(QWidget):
     def __init__(self, parent=None):
@@ -21,6 +21,7 @@ class LoginDialog(QWidget):
                 
 
 def runminecraft(forge_version):
+    
     MAGIC_USERNAME_KEY = 'ADELLPHI_USERNAME'
     APP_ID = 'ADELLPHI'  
 
