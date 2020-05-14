@@ -1,8 +1,8 @@
 args.txt
 *.jar.log
-
+myenv/
 forge*.jar
-
+.vscode
 ##PYTHON SPECIFIC##
 # Byte-compiled / optimized / DLL files
 __pycache__/
