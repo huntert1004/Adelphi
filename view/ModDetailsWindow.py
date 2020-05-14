@@ -14,23 +14,24 @@ import subprocess
 from library.pml.main import *
 from view.LoginDialog import LoginDialog
 
+
 class ModDetailsWindow(QDialog):
     def __init__(self, parent):
       super().__init__()
 
-    def isModInstalled(self,modFile):
+    def isModInstalled(self):
         mod_directory = ModsController.getModDirectory()
-        filename = modFile.split("/")[-1]
+        filename = self.mod.modfile.split("/")[-1]
         if os.path.isdir(mod_directory):
             test_filepath = os.path.join(mod_directory,filename)
             if os.path.isfile(test_filepath):
                 return True
             
-    def getForgeVersion(self,modCompat):
+    def getForgeVersion(self):
         try:
             versions_directory = ModsController.getVersionsDirectory()
             if (versions_directory):
-                modVersions = [x.strip() for x in modCompat.split(',')]
+                modVersions = [x.strip() for x in self.mod.compat.split(',')]
                 for child in os.listdir(versions_directory):
                     for modVersion in modVersions:
                         if (child.lower().startswith(modVersion + "-forge")):
@@ -38,8 +39,8 @@ class ModDetailsWindow(QDialog):
         except:
             pass
 
-    def isForgeInstalled(self, modCompat):
-        forge_dir = self.getForgeVersion(modCompat)
+    def isForgeInstalled(self):
+        forge_dir = self.getForgeVersion()
         versions_directory = ModsController.getVersionsDirectory()
 
         if (versions_directory and forge_dir):
@@ -49,6 +50,7 @@ class ModDetailsWindow(QDialog):
             
     def __init__(self, mod, parent=None):
         super().__init__(parent)
+        self.mod = mod
         self.name = mod.title
         self.setWindowTitle(mod.title)
         self.layout = QVBoxLayout()
@@ -62,25 +64,27 @@ class ModDetailsWindow(QDialog):
         self.layout.addWidget(QLabel("Minecraft Compatibility: " + mod.compat))
         
 
-        if (self.isForgeInstalled(mod.compat)):
+        if (self.isForgeInstalled()):
 
-            if (self.isModInstalled(mod.modfile)):
-                self.addUninstallButton(mod.modfile)
+            if (self.isModInstalled()):
+                self.addUninstallButton()                
             else:
-                self.addInstallButton(mod.modfile)
-            self.runbutton(mod.compat)
+                self.addInstallButton()
+
+            self.addRunButton()
+            self.addRunAsUserButton()
         else:
             self.missingForgeLabel = QLabel("Please create a MinecraftForge installation of version " + mod.compat + " to install this mod.")
             self.missingForgeLabel.setWordWrap(True)
             self.layout.addWidget(self.missingForgeLabel)
             modVersions = [x.strip() for x in mod.compat.split(',')]
             self.forgeInstallButton = QPushButton("Install Forge v" + modVersions[0])
-            self.forgeInstallButton.clicked.connect(lambda: self.installForge(modVersions[0], mod.modfile))
+            self.forgeInstallButton.clicked.connect(lambda: self.installForge(modVersions[0]))
             self.layout.addWidget(self.forgeInstallButton)
         
         self.setLayout(self.layout)
 
-    def installForge(self, version, modfile):
+    def installForge(self, version):
         forgeDownloadUrl = "";
  
         if (version == "1.15.2"):
@@ -101,48 +105,56 @@ class ModDetailsWindow(QDialog):
             with file as tmp_file:
                 shutil.copyfileobj(response, tmp_file)
                 subprocess.call(["java","-jar", filename])
-        self.addInstallButton(modfile)
+        self.addInstallButton()
         self.layout.removeWidget(self.forgeInstallButton)
         QMessageBox.information(self, "Adellphi", "Forge v" + version + " Install Successful")
 
-    def runbutton (self, modcompat):
-        self.runmc = QPushButton("Run")
-        forge_version = self.getForgeVersion(modcompat)        
-        self.runmc.clicked.connect(lambda: runminecraft(forge_version))
-        self.layout.addWidget(self.runmc)
-    
+    def addRunButton(self):
+        self.runButton = QPushButton("Run with new login")
+        forge_version = self.getForgeVersion()        
+        self.runButton.clicked.connect(lambda: runminecraft(forge_version))
+        self.layout.addWidget(self.runButton)
 
-                                                          
-    def addUninstallButton(self, modfile):
+    def addRunAsUserButton(self):
+        MAGIC_USERNAME_KEY = 'ADELLPHI_USERNAME'
+        APP_ID = 'ADELLPHI'
+        login = keyring.get_password(APP_ID, MAGIC_USERNAME_KEY)
+        if (login):
+            self.runAsUserButton = QPushButton("Run as " + login)
+            forge_version = self.getForgeVersion()        
+            self.runAsUserButton.clicked.connect(lambda: runminecraft(forge_version))
+            self.layout.addWidget(self.runAsUserButton)
+             
+    def addUninstallButton(self):
         self.uninstallButton = QPushButton("Uninstall Mod")
-        self.uninstallButton.clicked.connect(lambda: self.uninstall(modfile))
+        self.uninstallButton.clicked.connect(lambda: self.uninstall())
         self.layout.addWidget(self.uninstallButton)
 
-    def addInstallButton(self, modfile):
+    def addInstallButton(self):
         self.installButton = QPushButton("Install Mod")
-        self.installButton.clicked.connect(lambda: self.install(modfile))
+        self.installButton.clicked.connect(lambda: self.install())
         self.layout.addWidget(self.installButton)
 
-    def uninstall(self, modfile):
-        filename = modfile.split("/")[-1]
+    def uninstall(self):
+        filename = self.mod.modfile.split("/")[-1]
         mod_directory = ModsController.getModDirectory()
         file = os.path.join(mod_directory,filename)
         os.remove(file)
         self.layout.removeWidget(self.uninstallButton)
-        self.addInstallButton(modfile)
+        self.addInstallButton()        
         QMessageBox.information(self, "Adellphi", "Uninstall Successful")        
 
-    def install(self, modfile):
-        filename = modfile.split("/")[-1]
+    def install(self):
+        filename = self.mod.modfile.split("/")[-1]
         mod_directory = ModsController.getModDirectory()
 
         file = open(mod_directory +filename,"wb")
         #load data into file object
-        with urllib.request.urlopen("https://minifymods.com" + modfile) as response:
+        with urllib.request.urlopen("https://minifymods.com" + self.mod.modfile) as response:
             with file as tmp_file:
                 shutil.copyfileobj(response, tmp_file)
         self.layout.removeWidget(self.installButton)
-        self.addUninstallButton(modfile)        
+        self.addUninstallButton()   
         QMessageBox.information(self, "Adellphi", "Install Successful")
         
   

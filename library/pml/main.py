@@ -3,7 +3,9 @@ import subprocess
 import os
 import sys
 import platform
-from PyQt5.QtWidgets import QMessageBox, QInputDialog,QWidget
+from PyQt5.QtWidgets import QMessageBox, QInputDialog,QWidget, QLineEdit
+import keyring
+
 
 class LoginDialog(QWidget):
     def __init__(self, parent=None):
@@ -13,11 +15,15 @@ class LoginDialog(QWidget):
     def login(self):
         login, ok = QInputDialog.getText(self, "Minecraft Login", "Username:")
         if ok and login:
-            password, ok =  QInputDialog.getText(self, "Minecraft Login", "Password:")
+            password, ok =  QInputDialog.getText(self, "Minecraft Login", "Password:", QLineEdit.Password)
             if ok and password:
                 return login,password
+                
 
 def runminecraft(forge_version):
+    MAGIC_USERNAME_KEY = 'ADELLPHI_USERNAME'
+    APP_ID = 'ADELLPHI'  
+
     if platform.system() == 'Windows':
       appData = os.getenv('APPDATA')
       p = appData + "\\.minecraft\\"
@@ -28,8 +34,20 @@ def runminecraft(forge_version):
       appData = str(Path.home())
       p = appData + "/.minecraft/"
     
+    #check if login is saved, otherwise prompt using dialog
+    login = ""
+    password = ""
+    login = keyring.get_password(APP_ID, MAGIC_USERNAME_KEY)
+    if (login):
+        password = keyring.get_password(APP_ID, login)  
+
+    if not (login or password):
+        login,password = LoginDialog().login()
+        keyring.set_password(APP_ID, MAGIC_USERNAME_KEY, login)
+        keyring.set_password(APP_ID, login, password)
+
+
     
-    login,password = LoginDialog().login()
 
     # initialize
     #p = os.environ["appdata"] + "\\.minecraft"  # windows default game directory
@@ -38,7 +56,7 @@ def runminecraft(forge_version):
     if (not password):
         QMessageBox.information(None, "Adellphi", "You must login")
         return
-
+        
 
     pml.initialize(p)
     print("Initialized in " + pml.getGamePath())
@@ -54,9 +72,9 @@ def runminecraft(forge_version):
 
     inputVersion = forge_version
     # get profiles
-    profiles = pml.updateProfiles()
-    for item in profiles:
-        print(item.name)
+    #profiles = pml.updateProfiles()
+    #for item in profiles:
+        #print(item.name)
 
     #inputVersion = input("input version : ")    
 

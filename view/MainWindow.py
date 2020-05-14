@@ -28,13 +28,14 @@ class MainWindow(QWidget):
       mods = ModsController.getSearchData(term, self.filterSelect.currentText())
       self.createSearchTab()
       self.displaySearch(mods)
-
+#defines searchbar with mods
   def createSearchTab(self):
+    """ creates search tab if there isn't one already """
     if not hasattr(self, 'searchTabScroll'):
       self.searchTabScroll = QScrollArea()
       self.searchTabWidget = QWidget()
       self.searchTabVBoxLayout = QVBoxLayout()
-
+#creates search tab area
       # Add tabs
       self.searchTabWidget.setLayout(self.searchTabVBoxLayout)
       self.tabs.addTab(self.searchTabScroll,"Search")
@@ -57,13 +58,14 @@ class MainWindow(QWidget):
       child = self.grid.takeAt(0)
       if child.widget():
         child.widget().deleteLater()
-  
+  #addes grid to mainwindow
   def clearSearchResults(self):
+    """clears search results after new search"""
     while self.searchTabVBoxLayout.count():
       child = self.searchTabVBoxLayout.takeAt(0)
       if child.widget():
         child.widget().deleteLater()
-
+    #this fixs the clear search bug
     self.searchTitle = QLabel("Search Results")
     self.searchTitle.setStyleSheet("font-weight: bold; font-size: 3em")
     self.searchTabVBoxLayout.addWidget(self.searchTitle)
@@ -81,7 +83,7 @@ class MainWindow(QWidget):
       searchItem.mod.imageUrl = "https://minifymods.com" + item['field_screenshots']
       searchItem.create(self)      
       self.searchTabVBoxLayout.addWidget(searchItem)
-
+#this defines all the data in the database
       
   @pyqtSlot()
   def loadMore(self):
@@ -90,7 +92,7 @@ class MainWindow(QWidget):
     self.page += 1
     mods = ModsController.getModsData(self.page,self.filterSelect.currentText())
     self.displayMods(mods)
-
+#load more data .displaymod
   def displayMods(self,mods):
     if self.page > 5:
       return
@@ -107,7 +109,7 @@ class MainWindow(QWidget):
       rowRange = range(26,30)
       self.loadMoreButton.setEnabled(False)
       self.loadMoreButton.setText("Try Searching!")
-    
+    #addes a loadmorebutton and a try searchign after 5 clickedevents
     positions = [(i,j) for i in rowRange for j in range(4)]
             
     for position,item in zip(positions,mods):
@@ -118,14 +120,14 @@ class MainWindow(QWidget):
       imageLabel.mod.modfile = item['field_mod_file']
       imageLabel.mod.imageUrl = "https://minifymods.com" + item['field_screenshots']
       imageLabel.create(self)
-      
+      #defines data
       self.grid.addWidget(imageLabel, *position)
   
   def closeTab (self, currentIndex):
     currentQWidget = self.tabs.widget(currentIndex)
     currentQWidget.deleteLater()
     self.tabs.removeTab(currentIndex)
-
+#addes x on once a mod is clicked
 
   @pyqtSlot(QLabel)
   def modClicked(self, mod):
@@ -214,7 +216,7 @@ class MainWindow(QWidget):
     self.topmodLabel = QLabel("", self)
     self.topmodLabel.setGeometry(0, 0, 1200, 300)
     item = mods[0]
-    image = QPixmap("C:\\Users\\hunte\\OneDrive\\Desktop\\Adelphi\\adellphi.png")
+    image = QPixmap("C:\\Users\\hunte\\Desktop\\Adelphi\\adellphi.png")
     #exe null pix map fix C:\\Users\\hunte\\OneDrive\\Desktop\\Adelphi\\
     self.topmodLabel.setPixmap(image.scaled(1200, 400, Qt.KeepAspectRatio))
     self.tab1vbox.addWidget(self.topmodLabel)
