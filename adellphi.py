@@ -12,6 +12,7 @@ import qtmodern.windows
 from view.MainWindow import MainWindow
 import pathlib
 import sys
+import platform
 
 root = pathlib.Path()
 if getattr(sys, 'frozen', False):
@@ -35,7 +36,13 @@ class App(QMainWindow):
 if __name__ == '__main__':
     import sys, time
     app = QApplication(sys.argv)
-    splash_pix = QPixmap('C:\\Users\\hunte\\Desktop\\Adelphi\\splashscreen.gif')
+    imageroot = ""
+    if platform.system() == 'Windows':
+        splash_pix = QPixmap('C:\\Users\\hunte\\Desktop\\Adelphi\\splashscreen.gif')
+        imageroot = 'C:\\Users\\hunte\\Desktop\\Adelphi'
+    elif platform.system() == "Darwin":
+        splash_pix = QPixmap('/Users/angiethomas/Desktop/Adelphi/splashscreen.gif')
+        imageroot = '/Users/angiethomas/Desktop/Adelphi'
     #exe null pix map fix C:\\Users\\hunte\\OneDrive\\Desktop\\Adelphi\\
     splash = QSplashScreen(splash_pix)
     splash.setMask(splash_pix.mask())
