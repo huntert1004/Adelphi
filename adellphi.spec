@@ -3,6 +3,7 @@
 block_cipher = None
 import importlib
 import pathlib
+import platform
 package_imports = [['qtmodern', ['resources/frameless.qss', 'resources/style.qss']]]
 
 added_file = []
@@ -11,10 +12,18 @@ for package, files in package_imports:
     added_file.extend((proot / f, package) for f in files)
 block_cipher = None
 
-added_file += [("C:\\Users\\hunte\\Desktop\\Adelphi\\splashscreen.gif", '.' )]
-added_file += [("C:\\Users\\hunte\\Desktop\\Adelphi\\adellphi.png", '.' )]
+pathex = ""
+if platform.system() == 'Windows':
+    added_file += [("C:\\Users\\hunte\\Desktop\\Adelphi\\splashscreen.gif", '.' )]
+    added_file += [("C:\\Users\\hunte\\Desktop\\Adelphi\\adellphi.png", '.' )]
+    pathex = 'C:\\Users\\hunte\\Desktop\\Adelphi'
+elif platform.system() == "Darwin":
+    added_file += [("/Users/angiethomas/Desktop/Adelphi/splashscreen.gif", '.' )]
+    added_file += [("/Users/angiethomas/Desktop/Adelphi/adellphi.png", '.' )]
+    pathex = '/Users/angiethomas/Desktop/Adelphi'
+
 a = Analysis(['adellphi.py'],
-             pathex=['C:\\Users\\hunte\\Desktop\\Adelphi'],
+             pathex=[pathex],
              binaries=[],
              datas=added_file,
              hiddenimports=['PyQt5'],
@@ -40,4 +49,8 @@ exe = EXE(pyz,
           upx=True,
           upx_exclude=[],
           runtime_tmpdir=None,
-          console=True )
+          console=False)
+app = BUNDLE(exe,
+             name='adellphi.app',
+             icon=None,
+             bundle_identifier=None)
