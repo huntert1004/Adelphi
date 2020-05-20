@@ -90,7 +90,7 @@ class ModDetailsWindow(QDialog):
         if (version == "1.15.2"):
             forgeDownloadUrl = "https://minifymods.com/sites/default/files/forge-1.15.2-31.1.37-installer.jar"
         elif (version == "1.12.2"):
-            forgeDownloadUrl = "https://minifymods.com/sites/default/files/forge-1.12.2-14.23.5.2768-installer.jar"
+            forgeDownloadUrl = "https://minifymods.com/sites/default/files/forge-1.12.2-14.23.5.2813-installer.jar"
         elif (version == "1.8.9"):
             forgeDownloadUrl = "https://minifymods.com/sites/default/files/forge-1.8.9-11.15.1.1722-installer.jar"
         elif (version == "1.7.10"):
