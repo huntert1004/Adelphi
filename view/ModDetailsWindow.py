@@ -20,6 +20,7 @@ class ModDetailsWindow(QDialog):
       super().__init__()
 
     def isModInstalled(self):
+        
         mod_directory = ModsController.getModDirectory()
         filename = self.mod.modfile.split("/")[-1]
         if os.path.isdir(mod_directory):

@@ -219,14 +219,14 @@ class MainWindow(QWidget):
     item = mods[0]
     imageroot = ""
     if platform.system() == 'Windows':
-        splash_pix = QPixmap("C:\\Users\\hunte\\Desktop\\Adelphi\\adellphi.png")
-        imageroot = "C:\\Users\\hunte\\Desktop\\Adelphi"
+        self.image = QPixmap("C:\\Users\\hunte\\Desktop\\Adelphi\\adellphi.png")
+        self.imageroot = "C:\\Users\\hunte\\Desktop\\Adelphi"
     elif platform.system() == "Darwin":
-        image = QPixmap("/Users/angiethomas/Desktop/Adelphi/adellphi.png")
-        imageroot = "/Users/angiethomas/Desktop/Adelphi"
-   
+        self.image = QPixmap("/Users/angiethomas/Desktop/Adelphi/adellphi.png")
+        self.imageroot = "/Users/angiethomas/Desktop/Adelphi"
+        
     #exe null pix map fix C:\\Users\\hunte\\OneDrive\\Desktop\\Adelphi\\
-    self.topmodLabel.setPixmap(image.scaled(1200, 400, Qt.KeepAspectRatio))
+    self.topmodLabel.setPixmap(self.image.scaled(1200, 400, Qt.KeepAspectRatio))
     self.tab1vbox.addWidget(self.topmodLabel)
     self.topmod = Mod()
     self.topmod.title = item['title']

@@ -21,16 +21,16 @@ if getattr(sys, 'frozen', False):
     #hidden imports in exe file
 class App(QMainWindow):
     def __init__(self):
-        super().__init__()
-        self.title = 'Adellphi'
-        self.left = 0
-        self.top = 0
-        self.width = 1280
-        self.height = 900
-        self.setWindowTitle(self.title)
-        self.setGeometry(self.left, self.top, self.width, self.height)
-        self.table_widget = MainWindow(self)
-        self.table_widget.show()
+      super().__init__()
+      self.title = 'Adellphi'
+      self.left = 0
+      self.top = 0
+      self.width = 1280
+      self.height = 900
+      self.setWindowTitle(self.title)
+      self.setGeometry(self.left, self.top, self.width, self.height)
+      self.table_widget = MainWindow(self)
+      self.table_widget.show()
 #init the gmain windo widget sets the size and title
 
 if __name__ == '__main__':
