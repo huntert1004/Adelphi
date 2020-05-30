@@ -25,7 +25,7 @@ class TitleBar(QDialog):
         self.setWindowFlags(Qt.FramelessWindowHint)
         css = """
         QWidget{
-            Background: #AA00AA;
+            Background: #000000;
             color:white;
             font:12px bold;
             font-weight:bold;
@@ -33,17 +33,17 @@ class TitleBar(QDialog):
             height: 11px;
         }
         QDialog{
-            Background-image:url('adellphi.png');
+            Background-image:url('images/bordertest2.png');
             font-size:12px;
             color: black;
 
         }
         QToolButton{
-            Background:#AA00AA;
+            Background:#ffffff;
             font-size:11px;
         }
         QToolButton:hover{
-            Background: #FF00FF;
+            Background: #ffffff;
             font-size:11px;
         }
         """
@@ -51,17 +51,17 @@ class TitleBar(QDialog):
         self.setBackgroundRole(QPalette.Highlight)
         self.setStyleSheet(css)
         self.minimize=QToolButton(self)
-        self.minimize.setIcon(QIcon('img/min.png'))
+        self.minimize.setIcon(QIcon('images/min.jpg'))
         self.maximize=QToolButton(self)
-        self.maximize.setIcon(QIcon('img/max.png'))
+        self.maximize.setIcon(QIcon('images/max.png'))
         close=QToolButton(self)
-        close.setIcon(QIcon('img/close.png'))
+        close.setIcon(QIcon('images/close.png'))
         self.minimize.setMinimumHeight(10)
         close.setMinimumHeight(10)
         self.maximize.setMinimumHeight(10)
         label=QLabel(self)
-        label.setText("Window Title")
-        self.setWindowTitle("Window Title")
+        label.setText("Adellphi")
+        self.setWindowTitle("Adellphi")
         hbox=QHBoxLayout(self)
         hbox.addWidget(label)
         hbox.addWidget(self.minimize)
@@ -88,7 +88,7 @@ class TitleBar(QDialog):
             box.showMaximized()
             self.maxNormal=  True
             print('2')
-            self.maximize.setIcon(QIcon('img/max2.png'))
+            self.maximize.setIcon(QIcon('img/max.png'))
 
     def close(self):
         box.close()
@@ -126,7 +126,7 @@ class Frame(QFrame):
         self.setFrameShape(QFrame.StyledPanel)
         css = """
         QFrame{
-            Background:  #D700D7;
+            Background:  #ffffff;
             color:white;
             font:13px ;
             font-weight:bold;
