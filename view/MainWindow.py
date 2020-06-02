@@ -29,20 +29,20 @@ class MainWindow(QWidget):
       mods = ModsController.getSearchData(term, self.filterSelect.currentText())
       self.createSearchTab()
       self.displaySearch(mods)
-#defines searchbar with mods
+"""defines searchbar with mods"""
   def createSearchTab(self):
     """ creates search tab if there isn't one already """
     if not hasattr(self, 'searchTabScroll'):
       self.searchTabScroll = QScrollArea()
       self.searchTabWidget = QWidget()
       self.searchTabVBoxLayout = QVBoxLayout()
-#creates search tab area
-      # Add tabs
+"""creates search tab area"""
+      """Add tabs"""
       self.searchTabWidget.setLayout(self.searchTabVBoxLayout)
       self.tabs.addTab(self.searchTabScroll,"Search")
       self.tabs.setCurrentIndex(self.tabs.count()-1)
       self.tabs.tabBar().setTabButton(self.tabs.count()-1, QTabBar.RightSide,None)
-      #Scroll Area Properties
+      """Scroll Area Properties"""
       self.searchTabVBoxLayout.setAlignment(Qt.AlignTop)
       self.searchTabScroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
       self.searchTabScroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -50,7 +50,7 @@ class MainWindow(QWidget):
       self.searchTabScroll.setWidget(self.searchTabWidget)
     
     self.clearSearchResults()    
-  
+  """clears search results"""
   def clearGrid(self):
     self.page = 0
     self.loadMoreButton.setEnabled(True)
@@ -59,14 +59,14 @@ class MainWindow(QWidget):
       child = self.grid.takeAt(0)
       if child.widget():
         child.widget().deleteLater()
-  #addes grid to mainwindow
+  """addes grid to mainwindow"""
   def clearSearchResults(self):
     """clears search results after new search"""
     while self.searchTabVBoxLayout.count():
       child = self.searchTabVBoxLayout.takeAt(0)
       if child.widget():
         child.widget().deleteLater()
-    #this fixs the clear search bug
+    """this fixs the clear search bug"""
     self.searchTitle = QLabel("Search Results")
     self.searchTitle.setStyleSheet("font-weight: bold; font-size: 3em")
     self.searchTabVBoxLayout.addWidget(self.searchTitle)
@@ -84,7 +84,7 @@ class MainWindow(QWidget):
       searchItem.mod.imageUrl = "https://minifymods.com" + item['field_screenshots']
       searchItem.create(self)      
       self.searchTabVBoxLayout.addWidget(searchItem)
-#this defines all the data in the database
+"""this defines all the data in the database"""
       
   @pyqtSlot()
   def loadMore(self):
@@ -93,7 +93,8 @@ class MainWindow(QWidget):
     self.page += 1
     mods = ModsController.getModsData(self.page,self.filterSelect.currentText())
     self.displayMods(mods)
-#load more data .displaymod
+   
+"""load more data .displaymod"""
   def displayMods(self,mods):
     if self.page > 5:
       return
@@ -110,7 +111,7 @@ class MainWindow(QWidget):
       rowRange = range(26,30)
       self.loadMoreButton.setEnabled(False)
       self.loadMoreButton.setText("Try Searching!")
-    #addes a loadmorebutton and a try searchign after 5 clickedevents
+    """addes a loadmorebutton and a try searchign after 5 clickedevents"""
     positions = [(i,j) for i in rowRange for j in range(4)]
             
     for position,item in zip(positions,mods):
@@ -121,14 +122,14 @@ class MainWindow(QWidget):
       imageLabel.mod.modfile = item['field_mod_file']
       imageLabel.mod.imageUrl = "https://minifymods.com" + item['field_screenshots']
       imageLabel.create(self)
-      #defines data
+      """defines data"""
       self.grid.addWidget(imageLabel, *position)
   
   def closeTab (self, currentIndex):
     currentQWidget = self.tabs.widget(currentIndex)
     currentQWidget.deleteLater()
     self.tabs.removeTab(currentIndex)
-#addes x on once a mod is clicked
+"""addes x on once a mod is clicked"""
 
   @pyqtSlot(QLabel)
   def modClicked(self, mod):
@@ -158,7 +159,7 @@ class MainWindow(QWidget):
     mods = ModsController.getModsData(0,self.filterSelect.currentText())
     self.clearGrid()
     self.displayMods(mods)
-    
+    """these all define top second third and forth clicked events"""
   def __init__(self, parent,*args, **kwargs):
     super().__init__()
 
@@ -171,8 +172,9 @@ class MainWindow(QWidget):
     self.setGeometry(self.left, self.top, self.width, self.height)
 
     self.page = 0
+    """init attributes of the window"""
     
-     #get data for entire view
+     """get data for entire view"""
     mods = ModsController().getModsData()
     
     self.parent = parent
@@ -190,17 +192,18 @@ class MainWindow(QWidget):
     self.searchBar.setPlaceholderText("Search Mods") 
     self.searchBar.editingFinished.connect(self.searchMods)
     self.topBarLayout.addWidget(self.searchBar)
+    """addes a search bar to Qmainwindow"""
 
     self.filterSelect = QComboBox()
     self.filterSelect.addItem("Filter by Minecraft Version")
     self.filterSelect.addItems(["1.12.2","1.15.2","1.7.10","1.8.9"])
     self.filterSelect.currentIndexChanged.connect(self.filterChanged)
     self.topBarLayout.addWidget(self.filterSelect)
-
+"""addes filter to mods in QmainWindow"""
     self.topBarWidget.setLayout(self.topBarLayout)
     self.layout.addWidget(self.topBarWidget)
     
-    # Initialize tab screen
+    """Initialize tab screen"""
     self.tabs = QTabWidget()
     self.tabs.setTabsClosable(True)
     self.tabs.tabCloseRequested.connect(self.closeTab)
@@ -211,8 +214,8 @@ class MainWindow(QWidget):
     self.tab1vbox = QVBoxLayout()               # The Vertical Box that contains the Horizontal Boxes of  labels and buttons
 
 
-    #add content into the tab1vbox
-    #add top featured mod
+    """add content into the tab1vbox"""
+    
     
     self.topmodLabel = QLabel("", self)
     self.topmodLabel.setGeometry(0, 0, 1200, 300)
@@ -224,7 +227,7 @@ class MainWindow(QWidget):
     elif platform.system() == "Darwin":
         self.image = QPixmap("/Users/angiethomas/Desktop/Adelphi/adellphi.png")
         self.imageroot = "/Users/angiethomas/Desktop/Adelphi"
-        
+        """addes Qpixmap to Qmainwindow"""
     #exe null pix map fix C:\\Users\\hunte\\OneDrive\\Desktop\\Adelphi\\
     self.topmodLabel.setPixmap(self.image.scaled(1200, 400, Qt.KeepAspectRatio))
     self.tab1vbox.addWidget(self.topmodLabel)
@@ -239,11 +242,11 @@ class MainWindow(QWidget):
     
     
     
-    #add row of other featured mods
+    """add row of other featured mods"""
     self.featuredModsWidget = QWidget()
     self.featuredModsLayout = QHBoxLayout()
     
-    #2nd feature mod
+    """2nd feature mod"""
     self.secondtopmodlabel = QLabel("", self)
     self.secondtopmodlabel.setGeometry(0, 0, 400, 300)
     item = mods[0]
@@ -262,7 +265,7 @@ class MainWindow(QWidget):
     self.secondtopmod.image.loadFromData(urllib.request.urlopen(self.secondtopmod.imageUrl).read())
     
     self.secondtopmodlabel.mousePressEvent = self.secondClicked
-    #3rd feature mod
+    """3rd feature mod"""
     self.thirdtopmodlabel = QLabel("", self)
     self.thirdtopmodlabel.setGeometry(0, 0, 400, 300)
     item = mods[2]
@@ -282,7 +285,7 @@ class MainWindow(QWidget):
     
     self.thirdtopmodlabel.mousePressEvent = self.thirdClicked
     
-    #4th feature mod
+    """4th feature mod"""
     self.fourthtopmodlabel = QLabel("", self)
     self.fourthtopmodlabel.setGeometry(0, 0, 400, 300)
     item = mods[4]
@@ -308,7 +311,7 @@ class MainWindow(QWidget):
     
     self.tab1vbox.addWidget(self.featuredModsWidget)
 
-    #add grid
+    """add grid"""
     self.gridWidget = QWidget()
     self.grid = QGridLayout()      
     
@@ -317,24 +320,24 @@ class MainWindow(QWidget):
     self.gridWidget.setLayout(self.grid)
     self.tab1vbox.addWidget(self.gridWidget)
     
-    #add load more button
+    """add load more button"""
     self.loadMoreButton = QPushButton("Load More")
     self.loadMoreButton.clicked.connect(self.loadMore)
     self.tab1vbox.addWidget(self.loadMoreButton)
     
     ##### FINALIZE TAB1 #####
-    #now set tab1widget layout
+    """now set tab1widget layout"""
     self.tab1widget.setLayout(self.tab1vbox)
     self.tab1scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
     self.tab1scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
     self.tab1scroll.setWidgetResizable(True)
     self.tab1scroll.setWidget(self.tab1widget)
-    # Add tabs
+    """ Add tabs"""
     self.tabs.addTab(self.tab1scroll,"Mods")
     #make the first tab not closeable
     self.tabs.tabBar().setTabButton(0, QTabBar.RightSide,None)
 
-    #Scroll Area Properties
+    """Scroll Area Properties"""
     def scrollevent(self,event):
       if event.key() == QtCore.Qt.Key_Down:
               if self.tab1scroll.currentRow() == self.count()-1:
@@ -349,7 +352,7 @@ class MainWindow(QWidget):
                       super().scrollevent(event)
     
     
-    #Finalize screen
+    """Finalize layout"""
     self.layout.addWidget(self.tabs)
     self.setLayout(self.layout)
       

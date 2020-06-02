@@ -13,7 +13,7 @@ class Browser(QWebView):
         self.setWindowTitle('Loading...')
         self.titleChanged.connect(self.adjustTitle)
         #super(Browser).connect(self.ui.webView,QtCore.SIGNAL("titleChanged (const QString&amp;)"), self.adjustTitle)
-
+"""addes ad too qmainwindow""""
     def load(self,url):
         self.setUrl(QUrl(url))
     
@@ -23,3 +23,4 @@ class Browser(QWebView):
     def disableJS(self):
         settings = QWebSettings.globalSettings()
         settings.setAttribute(QWebSettings.JavascriptEnabled, False)
+        """enables JS"""

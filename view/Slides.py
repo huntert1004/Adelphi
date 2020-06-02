@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 import urllib.request
-
+"""dont use"""
 class Slides(QWidget):
     def __init__(self, image_files, parent=None):
         QWidget.__init__(self, parent)

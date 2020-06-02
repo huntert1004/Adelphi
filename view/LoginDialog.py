@@ -30,11 +30,11 @@ class LoginDialog(QDialog):
         self.setModal(True)
         self.setGeometry(100, 200, 1000, 1000)
         self.setWindowTitle('Login to Minecraft')
-
+"""defines login dialog as a Qdialog"""
     def loginpassword(self):
         return (self.login.text().strip(),
                 self.password.text().strip())
-
+"""returs pass and user"""
     @staticmethod
     def getLoginpassword(parent=None):
         dialog = LoginDialog(parent)
@@ -45,3 +45,4 @@ class LoginDialog(QDialog):
         #ok = mw.exec_()
         login, password = dialog.loginpassword()
         return (login, password, ok == QDialog.Accepted)
+        """gets pass and user if already inputed"""

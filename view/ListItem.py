@@ -6,4 +6,5 @@ class ListItem(QListWidget):
 
    def Clicked(self,item):
       QMessageBox.information(self, "ListWidget", "You installed: "+item.text())
+      """list what you downloaded"""
 

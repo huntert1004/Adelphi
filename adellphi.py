@@ -7,22 +7,23 @@ import os
 import sys
 import shutil
 import urllib.request
-import qtmodern.styles
-import qtmodern.windows
+#import qtmodern.styles
+#import qtmodern.windows
 from view.MainWindow import MainWindow
-import pathlib
+#import pathlib
 import sys
 import platform
 
-root = pathlib.Path()
-if getattr(sys, 'frozen', False):
-    root = pathlib.Path(sys._MEIPASS)
-    qtmodern.styles._STYLESHEET = root / 'qtmodern/style.qss' 
+#root = pathlib.Path()
+#if getattr(sys, 'frozen', False):
+ #   root = pathlib.Path(sys._MEIPASS)
+  #  qtmodern.styles._STYLESHEET = root / 'qtmodern/style.qss' 
     #hidden imports in exe file
 class TitleBar(QDialog):
     def __init__(self, parent=None):
         QDialog.__init__(self, parent)
         self.setWindowFlags(Qt.FramelessWindowHint)
+        """makes title bar class and defines it"""
         css = """
         QWidget{
             Background: #000000;
@@ -77,7 +78,7 @@ class TitleBar(QDialog):
 
     def showSmall(self):
         box.showMinimized()
-
+"""sets minimize buttom"""
     def showMaxRestore(self):
         if(self.maxNormal):
             box.showNormal()
@@ -89,18 +90,18 @@ class TitleBar(QDialog):
             self.maxNormal=  True
             print('2')
             self.maximize.setIcon(QIcon('img/max.png'))
-
+"""sets maxiumize button"""
     def close(self):
         box.close()
-
+"""sets close button"""
     def mousePressEvent(self,event):
         if event.button() == Qt.LeftButton:
             box.moving = True
             box.offset = event.pos()
-
+"""sets mouse pressed event and defines it"""
     def mouseMoveEvent(self,event):
         if box.moving: box.move(event.globalPos()-box.offset)
-
+"""defines mouse pressed event with movent of the mouse"""
 
 class App(QMainWindow):
     def __init__(self):
@@ -116,7 +117,7 @@ class App(QMainWindow):
       self.table_widget = MainWindow(self)
       self.table_widget.show()
       self.setWindowFlags(Qt.FramelessWindowHint)
-      
+      """sets attubutes and defines QMainWindow"""
 
 
 class Frame(QFrame):
@@ -124,6 +125,7 @@ class Frame(QFrame):
         QFrame.__init__(self, parent)
         self.m_mouse_down= False
         self.setFrameShape(QFrame.StyledPanel)
+        """sets the frame"""
         css = """
         QFrame{
             Background:  #ffffff;
@@ -156,21 +158,22 @@ class Frame(QFrame):
 
     def contentWidget(self):
         return self.m_content
+        """defines the widget"""
 
     def titleBar(self):
         return self.m_titleBar
-
+"""defines titlebar"""
     def mousePressEvent(self,event):
         self.m_old_pos = event.pos()
         self.m_mouse_down = event.button()== Qt.LeftButton
-
+"""sets init mouse clicked event for position"""
     def mouseMoveEvent(self,event):
         x=event.x()
         y=event.y()
-
+"""sets mouse x and y """
     def mouseReleaseEvent(self,event):
         m_mouse_down=False
-#init the gmain windo widget sets the size and title
+"""init the gmain windo widget sets the size and title"""
 
 if __name__ == '__main__':
     import sys, time
@@ -182,7 +185,7 @@ if __name__ == '__main__':
     elif platform.system() == "Darwin":
         splash_pix = QPixmap('/Users/angiethomas/Desktop/Adelphi/splashscreen.gif')
         imageroot = '/Users/angiethomas/Desktop/Adelphi'
-    #exe null pix map fix C:\\Users\\hunte\\OneDrive\\Desktop\\Adelphi\\
+    """defines image root and makes qpixmap/splash"""
     splash = QSplashScreen(splash_pix)
     splash.setMask(splash_pix.mask())
     splash.show()
@@ -194,5 +197,5 @@ if __name__ == '__main__':
     box.show()
     sys.exit(app.exec_())
     #runs adellphi
- 
+ """init app.exec"""
     
