@@ -18,7 +18,7 @@ from view.LoginDialog import LoginDialog
 class ModDetailsWindow(QDialog):
     def __init__(self, parent):
       super().__init__()
-
+"""puts Qdialog into QMainWindow"""
     def isModInstalled(self):
         
         mod_directory = ModsController.getModDirectory()
@@ -27,7 +27,7 @@ class ModDetailsWindow(QDialog):
             test_filepath = os.path.join(mod_directory,filename)
             if os.path.isfile(test_filepath):
                 return True
-            
+            """checks if mod is installed"""
     def getForgeVersion(self):
         try:
             versions_directory = ModsController.getVersionsDirectory()
@@ -39,7 +39,7 @@ class ModDetailsWindow(QDialog):
                             return child
         except:
             pass
-
+"""if mod is installed it gets the forge version"""
     def isForgeInstalled(self):
         forge_dir = self.getForgeVersion()
         versions_directory = ModsController.getVersionsDirectory()
@@ -48,7 +48,7 @@ class ModDetailsWindow(QDialog):
             test_path = os.path.join(versions_directory, forge_dir)
             if os.path.isdir(test_path):
                 return True
-            
+            """checks if forge is installed"""
     def __init__(self, mod, parent=None):
         super().__init__(parent)
         self.mod = mod
@@ -63,7 +63,7 @@ class ModDetailsWindow(QDialog):
         self.descriptionLabel.setWordWrap(True)
         self.layout.addWidget(self.descriptionLabel)
         self.layout.addWidget(QLabel("Minecraft Compatibility: " + mod.compat))
-        
+        """defines what is in Qdialog"""
 
         if (self.isForgeInstalled()):
 
@@ -82,7 +82,7 @@ class ModDetailsWindow(QDialog):
             self.forgeInstallButton = QPushButton("Install Forge v" + modVersions[0])
             self.forgeInstallButton.clicked.connect(lambda: self.installForge(modVersions[0]))
             self.layout.addWidget(self.forgeInstallButton)
-        
+        """this function adds and takes away buttons depending on what you pressed"""
         self.setLayout(self.layout)
 
     def installForge(self, version):
@@ -99,7 +99,7 @@ class ModDetailsWindow(QDialog):
  
         filename = forgeDownloadUrl.split("/")[-1]
         install_directory = ModsController.getDotMinecraftDirectory()
-
+"""gets forge"""
         file = open(filename,"wb")
         #load data into file object
         with urllib.request.urlopen(forgeDownloadUrl) as response:
@@ -109,13 +109,13 @@ class ModDetailsWindow(QDialog):
         self.addInstallButton()
         self.layout.removeWidget(self.forgeInstallButton)
         QMessageBox.information(self, "Adellphi", "Forge v" + version + " Install Successful")
-
+"""opens forge"""
     def addRunButton(self):
         self.runButton = QPushButton("Run with new login")
         forge_version = self.getForgeVersion()        
         self.runButton.clicked.connect(lambda: runminecraft(forge_version))
         self.layout.addWidget(self.runButton)
-
+"""addes a run button to Qdialog"""
     def addRunAsUserButton(self):
         MAGIC_USERNAME_KEY = 'ADELLPHI_USERNAME'
         APP_ID = 'ADELLPHI'
@@ -125,16 +125,19 @@ class ModDetailsWindow(QDialog):
             forge_version = self.getForgeVersion()        
             self.runAsUserButton.clicked.connect(lambda: runminecraft(forge_version))
             self.layout.addWidget(self.runAsUserButton)
-             
+             """addes a run as user button to Qdialog"""
+
     def addUninstallButton(self):
         self.uninstallButton = QPushButton("Uninstall Mod")
         self.uninstallButton.clicked.connect(lambda: self.uninstall())
         self.layout.addWidget(self.uninstallButton)
+"""addes a uninstall mod button to Qdialog"""
 
     def addInstallButton(self):
         self.installButton = QPushButton("Install Mod")
         self.installButton.clicked.connect(lambda: self.install())
         self.layout.addWidget(self.installButton)
+"""addes a install mod button to Qdialog"""
 
     def uninstall(self):
         filename = self.mod.modfile.split("/")[-1]
@@ -144,11 +147,11 @@ class ModDetailsWindow(QDialog):
         self.layout.removeWidget(self.uninstallButton)
         self.addInstallButton()        
         QMessageBox.information(self, "Adellphi", "Uninstall Successful")        
-
+"""defines uninstall as a method with gmessage box"""
     def install(self):
         filename = self.mod.modfile.split("/")[-1]
         mod_directory = ModsController.getModDirectory()
-
+"""instales mod"""
         file = open(mod_directory +filename,"wb")
         #load data into file object
         with urllib.request.urlopen("https://minifymods.com" + self.mod.modfile) as response:
@@ -157,5 +160,5 @@ class ModDetailsWindow(QDialog):
         self.layout.removeWidget(self.installButton)
         self.addUninstallButton()   
         QMessageBox.information(self, "Adellphi", "Install Successful")
-        
+        """gets data from database"""
   

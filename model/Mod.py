@@ -5,3 +5,4 @@ class Mod():
     compat = ''
     modfile = ''
     image = None
+    """defines title mod imageurl compat and modfile"""

@@ -15,7 +15,7 @@ class SearchItem(QWidget):
       self.parent = parent
       self.mod = Mod()
       #self.setFixedSize(300, 250)
-    
+    """defines search item"""
     def create(self, parent):      
 
       #------------#
@@ -40,9 +40,10 @@ class SearchItem(QWidget):
       self.layout.addWidget(self.textWidget)
       
       self.setLayout(self.layout)
-
+"""sets layout"""
     @pyqtSlot(QLabel)
     def clicked(self,event):
       modDetail = ModDetailsWindow(self.mod)
       self.parent.tabs.addTab(modDetail,self.mod.title)    
       self.parent.tabs.setCurrentIndex(self.parent.tabs.count()-1)
+"""addeds it to Qmainwindow"""

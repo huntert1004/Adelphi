@@ -5,7 +5,8 @@ from PyQt5.QtCore import *
 import qtmodern
 
 class LoginDialog(QDialog):
-    def __init__(self, parent=None):
+    def __init__(self, paret=None):
+        """defines login dialog as a Qdialog"""
         super(LoginDialog, self).__init__(parent)
 
         loginLbl = QLabel('Login')
@@ -32,11 +33,13 @@ class LoginDialog(QDialog):
         self.setWindowTitle('Login to Minecraft')
 
     def loginpassword(self):
+        """returs pass and user"""
         return (self.login.text().strip(),
                 self.password.text().strip())
 
     @staticmethod
     def getLoginpassword(parent=None):
+        """gets pass and user if already inputed"""
         dialog = LoginDialog(parent)
         dialog.login.setFocus()
         dialog.setGeometry(100, 200, 100, 100)
@@ -45,3 +48,4 @@ class LoginDialog(QDialog):
         #ok = mw.exec_()
         login, password = dialog.loginpassword()
         return (login, password, ok == QDialog.Accepted)
+        
