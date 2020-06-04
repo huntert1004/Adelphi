@@ -20,6 +20,7 @@ if getattr(sys, 'frozen', False):
     qtmodern.styles._STYLESHEET = root / 'qtmodern/style.qss' 
     #hidden imports in exe file
 class App(QMainWindow):
+   """init the gmain windo widget sets the size and title"""
     def __init__(self):
       super().__init__()
       self.title = 'Adellphi'
@@ -31,7 +32,7 @@ class App(QMainWindow):
       self.setGeometry(self.left, self.top, self.width, self.height)
       self.table_widget = MainWindow(self)
       self.table_widget.show()
-#init the gmain windo widget sets the size and title
+
 
 if __name__ == '__main__':
     import sys, time
@@ -52,6 +53,6 @@ if __name__ == '__main__':
     qtmodern.styles.light(app)
     ex = App()
     sys.exit(app.exec_())
-    #runs adellphi
+    """runs adellphi"""
  
     

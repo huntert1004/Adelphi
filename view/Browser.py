@@ -6,6 +6,7 @@ from PyQt5.QtWebEngineWidgets import QWebEngineSettings as QWebSettings
 from PyQt5.QtNetwork import *
 
 class Browser(QWebView):
+    """addes ad too qmainwindow""""
     def __init__(self):
         # QWebView
         self.view = QWebView.__init__(self)
@@ -13,7 +14,7 @@ class Browser(QWebView):
         self.setWindowTitle('Loading...')
         self.titleChanged.connect(self.adjustTitle)
         #super(Browser).connect(self.ui.webView,QtCore.SIGNAL("titleChanged (const QString&amp;)"), self.adjustTitle)
-"""addes ad too qmainwindow""""
+
     def load(self,url):
         self.setUrl(QUrl(url))
     
@@ -21,6 +22,7 @@ class Browser(QWebView):
         self.setWindowTitle(self.title())
     
     def disableJS(self):
+        """disables JS"""
         settings = QWebSettings.globalSettings()
         settings.setAttribute(QWebSettings.JavascriptEnabled, False)
-        """enables JS"""
+        
