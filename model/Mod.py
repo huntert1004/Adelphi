@@ -1,5 +1,5 @@
 class Mod():
-   """defines title mod imageurl compat and modfile"""
+    """defines title mod imageurl compat and modfile"""
     title = ''
     imageUrl = ''
     description = ''

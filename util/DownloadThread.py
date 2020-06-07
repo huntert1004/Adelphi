@@ -2,7 +2,7 @@ import urllib.request
 from PyQt5.QtCore import QThread, pyqtSignal
 
 class DownloadThread(QThread):
-   """gets data"""
+    """gets data"""
     data_downloaded = pyqtSignal()
 
     def __init__(self, url):
@@ -11,7 +11,7 @@ class DownloadThread(QThread):
         self._data = None
 
     def run(self):
-      """runs data"""
+        """runs data"""
         self._data = urllib.request.urlopen(self.url).read()
         self.data_downloaded.emit()
 

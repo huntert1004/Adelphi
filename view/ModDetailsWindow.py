@@ -16,7 +16,7 @@ from view.LoginDialog import LoginDialog
 
 
 class ModDetailsWindow(QDialog):
-   """puts Qdialog into QMainWindow"""
+    """puts Qdialog into QMainWindow"""
     def __init__(self, parent):
       super().__init__()
 
@@ -30,7 +30,7 @@ class ModDetailsWindow(QDialog):
                 return True
             
     def getForgeVersion(self):
-       """if mod is installed it gets the forge version"""
+        """if mod is installed it gets the forge version"""
         try:
             versions_directory = ModsController.getVersionsDirectory()
             if (versions_directory):
@@ -43,7 +43,7 @@ class ModDetailsWindow(QDialog):
             pass
 
     def isForgeInstalled(self):
-       """checks if forge is installed"""
+        """checks if forge is installed"""
         forge_dir = self.getForgeVersion()
         versions_directory = ModsController.getVersionsDirectory()
 
@@ -116,14 +116,14 @@ class ModDetailsWindow(QDialog):
         QMessageBox.information(self, "Adellphi", "Forge v" + version + " Install Successful")
 
     def addRunButton(self):
-       """addes a run button to Qdialog"""
+        """addes a run button to Qdialog"""
         self.runButton = QPushButton("Run with new login")
         forge_version = self.getForgeVersion()        
         self.runButton.clicked.connect(lambda: runminecraft(forge_version))
         self.layout.addWidget(self.runButton)
 
     def addRunAsUserButton(self):
-       """addes a run as user button to Qdialog"""
+        """addes a run as user button to Qdialog"""
         MAGIC_USERNAME_KEY = 'ADELLPHI_USERNAME'
         APP_ID = 'ADELLPHI'
         login = keyring.get_password(APP_ID, MAGIC_USERNAME_KEY)
@@ -135,21 +135,21 @@ class ModDetailsWindow(QDialog):
              
 
     def addUninstallButton(self):
-     """addes a uninstall mod button to Qdialog"""
+        """addes a uninstall mod button to Qdialog"""
         self.uninstallButton = QPushButton("Uninstall Mod")
         self.uninstallButton.clicked.connect(lambda: self.uninstall())
         self.layout.addWidget(self.uninstallButton)
 
 
     def addInstallButton(self):
-      """addes a install mod button to Qdialog"""
+        """addes a install mod button to Qdialog"""
         self.installButton = QPushButton("Install Mod")
         self.installButton.clicked.connect(lambda: self.install())
         self.layout.addWidget(self.installButton)
 
 
     def uninstall(self):
-      """defines uninstall as a method with gmessage box"""
+        """defines uninstall as a method with gmessage box"""
         filename = self.mod.modfile.split("/")[-1]
         mod_directory = ModsController.getModDirectory()
         file = os.path.join(mod_directory,filename)
@@ -159,7 +159,7 @@ class ModDetailsWindow(QDialog):
         QMessageBox.information(self, "Adellphi", "Uninstall Successful")        
 
     def install(self):
-       """instales mod"""
+        """instales mod"""
         filename = self.mod.modfile.split("/")[-1]
         mod_directory = ModsController.getModDirectory()
 

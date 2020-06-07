@@ -21,7 +21,7 @@ if getattr(sys, 'frozen', False):
     #hidden imports in exe file
 class App(QMainWindow):
    """init the gmain windo widget sets the size and title"""
-    def __init__(self):
+   def __init__(self):
       super().__init__()
       self.title = 'Adellphi'
       self.left = 0

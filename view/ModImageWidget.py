@@ -4,7 +4,7 @@ from PyQt5.QtCore import *
 from util.DownloadThread import DownloadThread
 
 class ModImageWidget(QWidget):
- """defines modimagewidget as a Qwidget"""
+  """defines modimagewidget as a Qwidget"""
   def __init__(self, mod, parent=None):
       super().__init__()
       self.setMinimumSize(100, 67)
@@ -22,19 +22,19 @@ class ModImageWidget(QWidget):
          
 
   def ondownloadFinished(self):
-       """defines ondownloadfinished"""
+      """defines ondownloadfinished"""
       self.paintImage()
      
 
   def paintImage(self):
-     """paints Qpixmap"""
+      """paints Qpixmap"""
       pixmap = QPixmap()
       pixmap.loadFromData(self.download_thread.get_data())
       self.mod.image = pixmap
       self.setPixmap(pixmap)
 
   def setPixmap(self, pixmap):
-     """sets Qpixmap"""
+      """sets Qpixmap"""
       self.pixmap = pixmap
       self.setMinimumSize(pixmap.width(), pixmap.height())
       self.update()

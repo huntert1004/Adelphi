@@ -8,8 +8,8 @@ from view.ModImageWidget import ModImageWidget
 from model.Mod import Mod
 
 class GridItem(QWidget):
-      """defines grid"""
-"""creates grid"""
+    """defines grid"""
+    """creates grid"""
 
     mod = None     
     
@@ -29,7 +29,6 @@ class GridItem(QWidget):
       self.layout.addWidget(self.textLabel)
       self.setLayout(self.layout)
     @pyqtSlot(QLabel)
-   """addes it to Qmainwindow"""
     def clicked(self,event):
       modDetail = ModDetailsWindow(self.mod)
       self.parent.tabs.addTab(modDetail,self.mod.title)    

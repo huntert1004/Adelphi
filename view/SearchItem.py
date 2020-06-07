@@ -8,7 +8,7 @@ from view.ModImageWidget import ModImageWidget
 from model.Mod import Mod
 
 class SearchItem(QWidget):
-     """defines search item"""
+    """defines search item"""
     mod = None     
     
     def __init__(self, parent):
@@ -18,7 +18,7 @@ class SearchItem(QWidget):
       #self.setFixedSize(300, 250)
    
     def create(self, parent):      
-"""sets layout"""
+      """sets layout"""
       #------------#
       self.layout = QHBoxLayout()
       self.layout.setAlignment(Qt.AlignLeft)
@@ -44,7 +44,7 @@ class SearchItem(QWidget):
 
     @pyqtSlot(QLabel)
     def clicked(self,event):
-   """addeds it to Qmainwindow"""
+      """addeds it to Qmainwindow"""
       modDetail = ModDetailsWindow(self.mod)
       self.parent.tabs.addTab(modDetail,self.mod.title)    
       self.parent.tabs.setCurrentIndex(self.parent.tabs.count()-1)

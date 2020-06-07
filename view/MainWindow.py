@@ -24,45 +24,45 @@ class MainWindow(QWidget):
 
   def searchMods(self):
    """defines searchbar with mods"""
-    term = self.searchBar.text()
+   term = self.searchBar.text()
     
-    if term:
+   if term:
       mods = ModsController.getSearchData(term, self.filterSelect.currentText())
       self.createSearchTab()
       self.displaySearch(mods)
 
   def createSearchTab(self):
-    """ creates search tab if there isn't one already """
-    if not hasattr(self, 'searchTabScroll'):
-      self.searchTabScroll = QScrollArea()
-      self.searchTabWidget = QWidget()
-      self.searchTabVBoxLayout = QVBoxLayout()
+      """ creates search tab if there isn't one already """
+      if not hasattr(self, 'searchTabScroll'):
+       self.searchTabScroll = QScrollArea()
+       self.searchTabWidget = QWidget()
+       self.searchTabVBoxLayout = QVBoxLayout()
 
-      self.searchTabWidget.setLayout(self.searchTabVBoxLayout)
-      self.tabs.addTab(self.searchTabScroll,"Search")
-      self.tabs.setCurrentIndex(self.tabs.count()-1)
-      self.tabs.tabBar().setTabButton(self.tabs.count()-1, QTabBar.RightSide,None)
+       self.searchTabWidget.setLayout(self.searchTabVBoxLayout)
+       self.tabs.addTab(self.searchTabScroll,"Search")
+       self.tabs.setCurrentIndex(self.tabs.count()-1)
+       self.tabs.tabBar().setTabButton(self.tabs.count()-1, QTabBar.RightSide,None)
      
-      self.searchTabVBoxLayout.setAlignment(Qt.AlignTop)
-      self.searchTabScroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-      self.searchTabScroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-      self.searchTabScroll.setWidgetResizable(True)
-      self.searchTabScroll.setWidget(self.searchTabWidget)
+       self.searchTabVBoxLayout.setAlignment(Qt.AlignTop)
+       self.searchTabScroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+       self.searchTabScroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+       self.searchTabScroll.setWidgetResizable(True)
+       self.searchTabScroll.setWidget(self.searchTabWidget)
     
-    self.clearSearchResults()    
- """creates search tab area"""
-  """Scroll Area Properties"""
-      """Add tabs"""
-  """clears search results"""
+       self.clearSearchResults()    
+       """creates search tab area"""
+       """Scroll Area Properties"""
+       """Add tabs"""
+       """clears search results"""
   def clearGrid(self):
    """addes grid to mainwindow"""
-    self.page = 0
-    self.loadMoreButton.setEnabled(True)
-    self.loadMoreButton.setText("Load More")
-    while self.grid.count():
-      child = self.grid.takeAt(0)
-      if child.widget():
-        child.widget().deleteLater()
+   self.page = 0
+   self.loadMoreButton.setEnabled(True)
+   self.loadMoreButton.setText("Load More")
+   while self.grid.count():
+     child = self.grid.takeAt(0)
+     if child.widget():
+       child.widget().deleteLater()
   
   def clearSearchResults(self):
     """clears search results after new search"""
@@ -81,7 +81,7 @@ class MainWindow(QWidget):
      """this defines all the data in the database"""
        
     #for position,item in zip(positions,mods):
-    for item in mods:
+     for item in mods:
       searchItem = SearchItem(self)
       searchItem.mod.title = item['title']
       searchItem.mod.description = item['body']
@@ -93,7 +93,7 @@ class MainWindow(QWidget):
       
   @pyqtSlot()
   def loadMore(self):
-   """load more data .displaymod"""
+    """load more data .displaymod"""
 
     if self.page > 5:
       return
@@ -102,7 +102,7 @@ class MainWindow(QWidget):
     self.displayMods(mods)
    
   def displayMods(self,mods):
-       """addes a loadmorebutton and a try searchign after 5 clickedevents"""
+    """addes a loadmorebutton and a try searchign after 5 clickedevents"""
 
     if self.page > 5:
       return
@@ -163,19 +163,19 @@ class MainWindow(QWidget):
 
   @pyqtSlot()
   def filterChanged(self, *args):    
-       """these all define top second third and forth clicked events"""
+    """these all define top second third and forth clicked events"""
 
     mods = ModsController.getModsData(0,self.filterSelect.currentText())
     self.clearGrid()
     self.displayMods(mods)
   def __init__(self, parent,*args, **kwargs):
-       """init attributes of the window"""
-     """get data for entire view"""
+    """init attributes of the window"""
+    """get data for entire view"""
     """addes a search bar to Qmainwindow"""
-"""addes filter to mods in QmainWindow"""
+    """addes filter to mods in QmainWindow"""
     """Initialize tab screen"""
     """add content into the tab1vbox"""
-        """addes Qpixmap to Qmainwindow"""
+    """addes Qpixmap to Qmainwindow"""
     """add row of other featured mods"""
     """2nd feature mod"""
     """3rd feature mod"""
@@ -208,6 +208,8 @@ class MainWindow(QWidget):
       
     #self.browser.load("https://minifymods.com/ad.html")
     #self.layout.addWidget(self.browser)
+    
+    #self.layout.addWidget(self.titleBarImage)
     self.topBarWidget = QWidget(self)
     self.topBarLayout = QHBoxLayout(self)
 
